@@ -53,3 +53,21 @@ df = conn.sql('''
 #%%
 conn.commit()
 conn.close()    
+
+
+#%%
+
+folder_path = config['INPUT_FILES']['entities_list_folder']
+
+
+# %%
+import os
+import configparser
+config = configparser.ConfigParser()
+config_files = config.read('../config.ini')
+
+folder_path = config['INPUT_FILES']['entities_list_folder']
+# %%
+
+os.listdir(folder_path)
+# %%

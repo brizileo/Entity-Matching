@@ -9,21 +9,22 @@ def load_entities_from_csv():
     """
     Load entities from a CSV files
     """
-    # Define the folder path containing the CSV files
-    folder_path = '../00_Data_In/sample/'
-    entities = []
 
+ 
     # Get configurations
     config = configparser.ConfigParser()
     config_files = config.read('../config.ini')
 
     db_path = config['DATABASE']['db_path']
+    folder_path = config['INPUT_FILES']['entities_list_folder']
 
     # Create a connection to the DuckDB database
     conn = duckdb.connect(db_path)
 
     # Load files from the folder
     id = 0
+    entities = []
+
     for filename in os.listdir(folder_path):
         if filename.endswith('.csv'):
             file_path = os.path.join(folder_path, filename)
