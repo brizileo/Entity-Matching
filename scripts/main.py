@@ -6,6 +6,5 @@ import os
 
 setup_database()
 load_entities_from_csv()
-#test
 
 # %%

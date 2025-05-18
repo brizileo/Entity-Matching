@@ -4,6 +4,7 @@ import os
 import duckdb
 import configparser
 import pandas as pd
+#%%
 
 def load_entities_from_csv():
     """
@@ -62,7 +63,80 @@ def load_entities_from_csv():
     conn.commit()
     conn.close()
 
+
+
+def identify_candidate_pairs():
+    """
+    Tokenise each entity name in the table tbl_entities
+    Compute pairwise Jaccard similarity between all entities within the same partition
+    Discard all entities for which the Jaccard similarity is below a given threshold
+    Persist the pairs to a new table named tbl_entities_candidate_pairs
+    """
     
+    # Get configurations
+    config = configparser.ConfigParser()
+    config_files = config.read('../config.ini')
+
+    db_path = config['DATABASE']['db_path']
+
+    # Create a connection to the DuckDB database
+    conn = duckdb.connect(db_path)
+    
+  
+    # Create the table tbl_entities_tokens
+    # This table contains the tokenised entity names and the number of tokens for each entity
+    conn.sql(
+    """
+    CREATE TABLE tbl_entities_tokens AS
+    SELECT *, COUNT(*) OVER (PARTITION BY entity_id) AS nb_tokens
+    FROM (
+        SELECT
+            entity_id           
+            ,entity_name         
+            ,partition_criteria  
+            ,cluster_id     
+            ,regexp_replace(word,'^[.,;:!?"''()\\[\\]{}-]+|[.,;:!?"''()\\[\\]{}-]+$','') AS token
+        FROM 
+            (
+                SELECT
+                entity_id           
+                ,entity_name         
+                ,partition_criteria  
+                ,cluster_id         
+                ,regexp_split_to_table(entity_name, ' ') AS word
+            FROM tbl_entities, 
+            ) X 
+        ) Y;
+    """
+    )
+    
+    # Create the table tbl_entities_candidate_pairs
+    # This table contains the pairs of entities with a Jaccard similarity
+    conn.sql(
+    """
+    CREATE TABLE tbl_entities_pairs AS    
+        SELECT 
+            t1.entity_id AS entity_id_1,
+            t1.entity_name AS entity_name_1,
+            t2.entity_id AS entity_id_2,
+            t2.entity_name AS entity_name_2,
+            COUNT(*)/(t1.nb_tokens + t2.nb_tokens - COUNT(*)) AS jaccard_similarity
+        FROM tbl_entities_tokens t1
+        INNER JOIN tbl_entities_tokens t2
+        ON t1.entity_id < t2.entity_id
+        AND t1.partition_criteria = t2.partition_criteria
+        AND t1.token = t2.token
+        GROUP BY 
+            t1.entity_id 
+            ,t1.entity_name 
+            ,t2.entity_id 
+            ,t2.entity_name
+            ,t1.nb_tokens
+            ,t2.nb_tokens        
+    """
+    )
 
 
-#%%
+    conn.commit()
+    conn.close()
+

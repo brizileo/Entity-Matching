@@ -13,6 +13,8 @@ db_path = config['DATABASE']['db_path']
 # Create a connection to the DuckDB database
 conn = duckdb.connect(db_path)
 
+############################
+
 #%%
 
 df = conn.sql('''
@@ -63,4 +65,25 @@ print(3896319-411913) #3484406
 
 3484406
 
+# %%
+
+# Get configurations
+conn.sql(
+    """
+DROP TABLE IF EXISTS tbl_entities_pairs;    
+    """
+    )
+
+# %%
+conn.commit()
+# %%
+conn.close()
+# %%
+conn.sql(
+    """
+    SELECT *   
+    FROM tbl_entities_tokens
+    LIMIT 10 
+    """
+    )
 # %%
