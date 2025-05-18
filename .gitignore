@@ -1,0 +1,11 @@
+# Ignore everything in 00_Data_In directory
+00_Data_In/
+
+# Ignore Python bytecode cache
+__pycache__/
+
+# Ignor database
+00_Data/
+
+
+.DS_Store
