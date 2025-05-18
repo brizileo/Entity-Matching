@@ -33,7 +33,7 @@ def load_entities_from_csv():
                 next(reader, None)  # Skip header row
                 for row in reader:
                     #row.append(filename)
-                    entities.append([id,' '.join(row[1:5]), '' , row[0]]) #recid,givenname,surname,suburb,postcode
+                    entities.append([id,' '.join(row[1:4]), row[4] , row[0]]) #recid,givenname,surname,suburb,postcode
                     id += 1
 
     df = pd.DataFrame(entities, columns=['entity_id', 'entity_name', 'partition_criteria', 'cluster_id'])
@@ -44,6 +44,19 @@ def load_entities_from_csv():
         SELECT DISTINCT MIN(entity_id), entity_name, partition_criteria, cluster_id
         FROM df
         GROUP BY entity_name, partition_criteria, cluster_id;
+    ''')
+
+    # Drop cluster where mispelling is on post code so that we can use the post code as partion criteria
+
+    conn.sql('''
+        DELETE FROM tbl_entities
+        USING (
+            SELECT cluster_id
+            FROM tbl_entities
+            GROUP BY cluster_id
+            HAVING COUNT(DISTINCT partition_criteria) > 1
+        ) AS to_delete
+        WHERE tbl_entities.cluster_id = to_delete.cluster_id
     ''')
 
     conn.commit()

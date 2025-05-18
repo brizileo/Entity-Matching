@@ -16,16 +16,20 @@ conn = duckdb.connect(db_path)
 #%%
 
 df = conn.sql('''
-        SELECT cluster_id, COUNT(*) AS count
+        SELECT COUNT(*)
         FROM tbl_entities
-        GROUP BY cluster_id
-        HAVING COUNT(*) > 1
     ''').to_df()
 #%%
 df = conn.sql('''
-        SELECT *
+        SELECT COUNT(*) AS total
         FROM tbl_entities
-        WHERE cluster_id  = 1073005
+        WHERE cluster_id IN 
+            (
+            SELECT cluster_id
+            FROM tbl_entities
+            GROUP BY cluster_id
+            HAVING COUNT(DISTINCT partition_criteria) > 1
+            ) 
     ''').to_df()
 
 #%%
@@ -54,20 +58,9 @@ df = conn.sql('''
 conn.commit()
 conn.close()    
 
-
 #%%
+print(3896319-411913) #3484406
 
-folder_path = config['INPUT_FILES']['entities_list_folder']
+3484406
 
-
-# %%
-import os
-import configparser
-config = configparser.ConfigParser()
-config_files = config.read('../config.ini')
-
-folder_path = config['INPUT_FILES']['entities_list_folder']
-# %%
-
-os.listdir(folder_path)
 # %%
