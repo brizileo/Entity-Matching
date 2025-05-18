@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "entity-matching"
+version = "0.1.0"
+description = "Perform entity matching leveraging local language models"
+authors = ["Leonardo Brizi <brizileo@gmail.com>"]
+readme = "README.md"
+packages = [{include = "entity_matching"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+duckdb = "^1.2.2"
+ollama = "^0.4.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
