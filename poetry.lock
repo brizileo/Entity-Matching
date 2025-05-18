@@ -23,10 +23,8 @@ files = [
 ]
 
 [package.dependencies]
-exceptiongroup = {version = ">=1.0.2", markers = "python_version < \"3.11\""}
 idna = ">=2.8"
 sniffio = ">=1.1"
-typing_extensions = {version = ">=4.5", markers = "python_version < \"3.13\""}
 
 [package.extras]
 doc = ["Sphinx (>=8.2,<9.0)", "packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx_rtd_theme"]
@@ -103,23 +101,6 @@ files = [
     {file = "duckdb-1.2.2-cp39-cp39-win_amd64.whl", hash = "sha256:6507ad2445cd3479853fb6473164b5eb5b22446d283c9892cfbbd0a85c5f361d"},
     {file = "duckdb-1.2.2.tar.gz", hash = "sha256:1e53555dece49201df08645dbfa4510c86440339889667702f936b7d28d39e43"},
 ]
-
-[[package]]
-name = "exceptiongroup"
-version = "1.3.0"
-description = "Backport of PEP 654 (exception groups)"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "exceptiongroup-1.3.0-py3-none-any.whl", hash = "sha256:4d111e6e0c13d0644cad6ddaa7ed0261a0b36971f6d23e7ec9b4b9097da78a10"},
-    {file = "exceptiongroup-1.3.0.tar.gz", hash = "sha256:b241f5885f560bc56a59ee63ca4c6a8bfa46ae4ad651af316d4e81817bb9fd88"},
-]
-
-[package.dependencies]
-typing-extensions = {version = ">=4.6.0", markers = "python_version < \"3.13\""}
-
-[package.extras]
-test = ["pytest (>=6)"]
 
 [[package]]
 name = "h11"
@@ -376,5 +357,5 @@ typing-extensions = ">=4.12.0"
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.9"
-content-hash = "1a072f31ba50ad87535e8dc07c0d1790fe3b3ddc757d685b4371e31d45c0f6f0"
+python-versions = "^3.13"
+content-hash = "4445664ee694ee09dc48265447fcdc6d5936f393133ca0f7f6a952d9e59a52e7"
