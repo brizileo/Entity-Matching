@@ -18,6 +18,7 @@ def load_entities_from_csv():
 
     db_path = config['DATABASE']['db_path']
     folder_path = config['INPUT_FILES']['entities_list_folder']
+    limit_rows = config['PARAMETERS']['limit_rows']
 
     # Create a connection to the DuckDB database
     conn = duckdb.connect(db_path)
@@ -40,12 +41,15 @@ def load_entities_from_csv():
     df = pd.DataFrame(entities, columns=['entity_id', 'entity_name', 'partition_criteria', 'cluster_id'])
 
     # Persist data to the database
-    conn.sql('''
+    conn.sql(
+    """
         INSERT INTO tbl_entities (entity_id, entity_name, partition_criteria, cluster_id)
         SELECT DISTINCT MIN(entity_id), entity_name, partition_criteria, cluster_id
         FROM df
-        GROUP BY entity_name, partition_criteria, cluster_id;
-    ''')
+        GROUP BY entity_name, partition_criteria, cluster_id
+        LIMIT """ + str(limit_rows) + """;
+    """
+    )
 
     # Drop cluster where mispelling is on post code so that we can use the post code as partion criteria
 
@@ -78,6 +82,7 @@ def identify_candidate_pairs():
     config_files = config.read('../config.ini')
 
     db_path = config['DATABASE']['db_path']
+    threshold = config['PARAMETERS']['threshold']
 
     # Create a connection to the DuckDB database
     conn = duckdb.connect(db_path)
@@ -115,24 +120,25 @@ def identify_candidate_pairs():
     conn.sql(
     """
     CREATE TABLE tbl_entities_pairs AS    
-        SELECT 
-            t1.entity_id AS entity_id_1,
-            t1.entity_name AS entity_name_1,
-            t2.entity_id AS entity_id_2,
-            t2.entity_name AS entity_name_2,
-            COUNT(*)/(t1.nb_tokens + t2.nb_tokens - COUNT(*)) AS jaccard_similarity
-        FROM tbl_entities_tokens t1
-        INNER JOIN tbl_entities_tokens t2
-        ON t1.entity_id < t2.entity_id
-        AND t1.partition_criteria = t2.partition_criteria
-        AND t1.token = t2.token
-        GROUP BY 
-            t1.entity_id 
-            ,t1.entity_name 
-            ,t2.entity_id 
-            ,t2.entity_name
-            ,t1.nb_tokens
-            ,t2.nb_tokens        
+    SELECT 
+        t1.entity_id AS entity_id_1,
+        t1.entity_name AS entity_name_1,
+        t2.entity_id AS entity_id_2,
+        t2.entity_name AS entity_name_2,
+        COUNT(*)/(t1.nb_tokens + t2.nb_tokens - COUNT(*)) AS jaccard_similarity
+    FROM tbl_entities_tokens t1
+    INNER JOIN tbl_entities_tokens t2
+    ON t1.entity_id < t2.entity_id
+    AND t1.partition_criteria = t2.partition_criteria
+    AND t1.token = t2.token
+    GROUP BY 
+        t1.entity_id 
+        ,t1.entity_name 
+        ,t2.entity_id 
+        ,t2.entity_name
+        ,t1.nb_tokens
+        ,t2.nb_tokens   
+    HAVING jaccard_similarity >= """ + str(threshold) + """     
     """
     )
 

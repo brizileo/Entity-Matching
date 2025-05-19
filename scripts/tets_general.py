@@ -18,8 +18,9 @@ conn = duckdb.connect(db_path)
 #%%
 
 df = conn.sql('''
-        SELECT COUNT(*)
-        FROM tbl_entities
+        SELECT *
+        FROM tbl_entities_pairs
+        ORDER BY jaccard_similarity DESC
     ''').to_df()
 #%%
 df = conn.sql('''
