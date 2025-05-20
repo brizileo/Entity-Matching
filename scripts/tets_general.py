@@ -88,3 +88,64 @@ conn.sql(
     """
     )
 # %%
+
+#%%
+
+df = conn.sql('''
+    SELECT*
+    FROM 
+        (
+        SELECT entity_id_1, entity_name_1, entity_id_2, entity_name_2
+        FROM tbl_entities_pairs   
+        UNION 
+        SELECT entity_id_2, entity_name_2, entity_id_1, entity_name_1
+        FROM tbl_entities_pairs 
+        ) AS t   
+    EXCEPT
+    SELECT*
+    FROM 
+        (
+        SELECT entity_id_1, entity_name_1, entity_id_2, entity_name_2
+        FROM tbl_entities_pairs_a2   
+        UNION 
+        SELECT entity_id_2, entity_name_2, entity_id_1, entity_name_1
+        FROM tbl_entities_pairs_a2  
+        ) AS t                         
+    ''').to_df()
+# %%
+
+df = conn.sql('''
+
+
+    SELECT *
+    FROM tbl_entities_pairs                     
+    ''').to_df()
+
+# %%
+
+
+#%%
+
+df = conn.sql('''
+    SELECT*
+    FROM 
+        (
+        SELECT entity_id_1, entity_name_1, entity_id_2, entity_name_2
+        FROM tbl_entities_pairs_a2   
+        UNION 
+        SELECT entity_id_2, entity_name_2, entity_id_1, entity_name_1
+        FROM tbl_entities_pairs_a2
+        ) AS t   
+    EXCEPT
+    SELECT*
+    FROM 
+        (
+        SELECT entity_id_1, entity_name_1, entity_id_2, entity_name_2
+        FROM tbl_entities_pairs 
+        UNION 
+        SELECT entity_id_2, entity_name_2, entity_id_1, entity_name_1
+        FROM tbl_entities_pairs
+        ) AS t                         
+    ''').to_df()
+
+# %%

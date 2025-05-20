@@ -100,7 +100,7 @@ def identify_candidate_pairs():
             ,entity_name         
             ,partition_criteria  
             ,cluster_id     
-            ,regexp_replace(word,'^[.,;:!?"''()\\[\\]{}-]+|[.,;:!?"''()\\[\\]{}-]+$','') AS token
+            ,lower(regexp_replace(word,'^[.,;:!?"''()\\[\\]{}-]+|[.,;:!?"''()\\[\\]{}-]+$','')) AS token
         FROM 
             (
                 SELECT
@@ -115,6 +115,7 @@ def identify_candidate_pairs():
     """
     )
     
+    #Approach 1 - Exact token match
     # Create the table tbl_entities_candidate_pairs
     # This table contains the pairs of entities with a Jaccard similarity
     conn.sql(
@@ -131,6 +132,34 @@ def identify_candidate_pairs():
     ON t1.entity_id < t2.entity_id
     AND t1.partition_criteria = t2.partition_criteria
     AND t1.token = t2.token
+    GROUP BY 
+        t1.entity_id 
+        ,t1.entity_name 
+        ,t2.entity_id 
+        ,t2.entity_name
+        ,t1.nb_tokens
+        ,t2.nb_tokens   
+    HAVING jaccard_similarity >= """ + str(threshold) + """     
+    """
+    )
+
+    #Approach2 - Fuzzy token match with Jaro Winkler
+    # Create the table tbl_entities_candidate_pairs
+    # This table contains the pairs of entities with a Jaccard similarity
+    conn.sql(
+    """
+    CREATE TABLE tbl_entities_pairs_a2 AS    
+    SELECT 
+        t1.entity_id AS entity_id_1,
+        t1.entity_name AS entity_name_1,
+        t2.entity_id AS entity_id_2,
+        t2.entity_name AS entity_name_2,
+        (COUNT(DISTINCT t1.nb_tokens)+COUNT(DISTINCT t2.nb_tokens))*0.5/(t1.nb_tokens + t2.nb_tokens - (COUNT(DISTINCT t1.nb_tokens)+COUNT(DISTINCT t2.nb_tokens))*0.5) AS jaccard_similarity
+    FROM tbl_entities_tokens t1
+    INNER JOIN tbl_entities_tokens t2
+    ON t1.entity_id < t2.entity_id
+    AND t1.partition_criteria = t2.partition_criteria
+    AND jaro_winkler_similarity(t1.token, t2.token) > 0.90
     GROUP BY 
         t1.entity_id 
         ,t1.entity_name 
