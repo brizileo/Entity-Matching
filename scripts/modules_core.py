@@ -11,7 +11,7 @@ def load_entities_from_csv():
     Load entities from a CSV files
     """
 
- 
+    #%%
     # Get configurations
     config = configparser.ConfigParser()
     config_files = config.read('../config.ini')
@@ -22,6 +22,7 @@ def load_entities_from_csv():
 
     # Create a connection to the DuckDB database
     conn = duckdb.connect(db_path)
+    #%%
 
     # Load files from the folder
     id = 0
@@ -90,10 +91,11 @@ def identify_candidate_pairs():
   
     # Create the table tbl_entities_tokens
     # This table contains the tokenised entity names and the number of tokens for each entity
+    # Token splitting is done on space. Leading and trailing special characters are removed
     conn.sql(
     """
     CREATE TABLE tbl_entities_tokens AS
-    SELECT *, COUNT(*) OVER (PARTITION BY entity_id) AS nb_tokens
+    SELECT *, COUNT(DISTINCT token) OVER (PARTITION BY entity_id) AS nb_tokens
     FROM (
         SELECT
             entity_id           
@@ -115,17 +117,17 @@ def identify_candidate_pairs():
     """
     )
     
-    #Approach 1 - Exact token match
+    #Approach 1 - Jaccard similarity
     # Create the table tbl_entities_candidate_pairs
     # This table contains the pairs of entities with a Jaccard similarity
     conn.sql(
     """
-    CREATE TABLE tbl_entities_pairs AS    
+    CREATE TABLE tbl_entities_pairs_jaccard AS    
     SELECT 
-        t1.entity_id AS entity_id_1,
-        t1.entity_name AS entity_name_1,
-        t2.entity_id AS entity_id_2,
-        t2.entity_name AS entity_name_2,
+        t1.entity_id    AS entity_id_1,
+        t1.entity_name  AS entity_name_1,
+        t2.entity_id    AS entity_id_2,
+        t2.entity_name  AS entity_name_2,
         COUNT(*)/(t1.nb_tokens + t2.nb_tokens - COUNT(*)) AS jaccard_similarity
     FROM tbl_entities_tokens t1
     INNER JOIN tbl_entities_tokens t2
@@ -143,34 +145,65 @@ def identify_candidate_pairs():
     """
     )
 
-    #Approach2 - Fuzzy token match with Jaro Winkler
+    #Approach2 - Soft Jaccard with Jaro Winkler
     # Create the table tbl_entities_candidate_pairs
-    # This table contains the pairs of entities with a Jaccard similarity
+    # This table contains the pairs of entities with a Soft Jaccard similarity
+
+    #%%
     conn.sql(
     """
-    CREATE TABLE tbl_entities_pairs_a2 AS    
+    CREATE TABLE tbl_entities_pairs_soft_jaccard AS  
+    WITH similarity AS (
+        SELECT 
+            t1.entity_id    AS entity_id_1,
+            t1.entity_name  AS entity_name_1,
+            t2.entity_id    AS entity_id_2,
+            t2.entity_name  AS entity_name_2,
+            t1.nb_tokens    AS nb_tokens_1,
+            t2.nb_tokens    AS nb_tokens_2, 
+            t1.token        AS token_1,
+            t2.token        AS token_2,
+            jaro_winkler_similarity(t1.token, t2.token) AS similarity
+        FROM tbl_entities_tokens t1
+        INNER JOIN tbl_entities_tokens t2
+        ON t1.entity_id < t2.entity_id
+        AND t1.partition_criteria = t2.partition_criteria
+        )
+    ,ranked AS (
+        SELECT *
+        FROM 
+        (
+            SELECT 
+                entity_id_1,
+                entity_name_1,
+                entity_id_2,
+                entity_name_2,
+                nb_tokens_1,
+                nb_tokens_2,
+                similarity,
+                ROW_NUMBER() OVER (PARTITION BY entity_id_1, entity_id_2, token_1 ORDER BY similarity DESC) AS rank
+            FROM similarity
+        ) sub
+        WHERE rank = 1
+    )  
     SELECT 
-        t1.entity_id AS entity_id_1,
-        t1.entity_name AS entity_name_1,
-        t2.entity_id AS entity_id_2,
-        t2.entity_name AS entity_name_2,
-        (COUNT(DISTINCT t1.nb_tokens)+COUNT(DISTINCT t2.nb_tokens))*0.5/(t1.nb_tokens + t2.nb_tokens - (COUNT(DISTINCT t1.nb_tokens)+COUNT(DISTINCT t2.nb_tokens))*0.5) AS jaccard_similarity
-    FROM tbl_entities_tokens t1
-    INNER JOIN tbl_entities_tokens t2
-    ON t1.entity_id < t2.entity_id
-    AND t1.partition_criteria = t2.partition_criteria
-    AND jaro_winkler_similarity(t1.token, t2.token) > 0.90
+        entity_id_1,
+        entity_name_1,
+        entity_id_2,
+        entity_name_2,
+        SUM(similarity)/(nb_tokens_1 + nb_tokens_2 - COUNT(*)) AS soft_jaccard_similarity
+    FROM ranked
     GROUP BY 
-        t1.entity_id 
-        ,t1.entity_name 
-        ,t2.entity_id 
-        ,t2.entity_name
-        ,t1.nb_tokens
-        ,t2.nb_tokens   
-    HAVING jaccard_similarity >= """ + str(threshold) + """     
+        entity_id_1,
+        entity_name_1,
+        entity_id_2,
+        entity_name_2,
+        nb_tokens_1,
+        nb_tokens_2, 
+    HAVING soft_jaccard_similarity >= """ + str(threshold) + """     
     """
     )
-
+    #%%
 
     conn.commit()
     conn.close()

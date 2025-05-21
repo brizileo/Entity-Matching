@@ -1,5 +1,6 @@
-# Ignore everything in 00_Data_In directory
+# Ignore everything in 00_Data_In and 10_Data_Out directories
 00_Data_In/
+10_Data_Out/
 
 # Ignore Python bytecode cache
 __pycache__/

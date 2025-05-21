@@ -96,20 +96,20 @@ df = conn.sql('''
     FROM 
         (
         SELECT entity_id_1, entity_name_1, entity_id_2, entity_name_2
-        FROM tbl_entities_pairs   
+        FROM tbl_entities_pairs_jaccard   
         UNION 
         SELECT entity_id_2, entity_name_2, entity_id_1, entity_name_1
-        FROM tbl_entities_pairs 
+        FROM tbl_entities_pairs_jaccard 
         ) AS t   
     EXCEPT
     SELECT*
     FROM 
         (
         SELECT entity_id_1, entity_name_1, entity_id_2, entity_name_2
-        FROM tbl_entities_pairs_a2   
+        FROM tbl_entities_pairs_soft_jaccard   
         UNION 
         SELECT entity_id_2, entity_name_2, entity_id_1, entity_name_1
-        FROM tbl_entities_pairs_a2  
+        FROM tbl_entities_pairs_soft_jaccard  
         ) AS t                         
     ''').to_df()
 # %%
@@ -118,7 +118,7 @@ df = conn.sql('''
 
 
     SELECT *
-    FROM tbl_entities_pairs                     
+    FROM tbl_entities_pairs_jaccard                     
     ''').to_df()
 
 # %%
@@ -131,21 +131,84 @@ df = conn.sql('''
     FROM 
         (
         SELECT entity_id_1, entity_name_1, entity_id_2, entity_name_2
-        FROM tbl_entities_pairs_a2   
+        FROM tbl_entities_pairs_soft_jaccard   
         UNION 
         SELECT entity_id_2, entity_name_2, entity_id_1, entity_name_1
-        FROM tbl_entities_pairs_a2
+        FROM tbl_entities_pairs_soft_jaccard
         ) AS t   
     EXCEPT
     SELECT*
     FROM 
         (
         SELECT entity_id_1, entity_name_1, entity_id_2, entity_name_2
-        FROM tbl_entities_pairs 
+        FROM tbl_entities_pairs_jaccard 
         UNION 
         SELECT entity_id_2, entity_name_2, entity_id_1, entity_name_1
-        FROM tbl_entities_pairs
+        FROM tbl_entities_pairs_jaccard
         ) AS t                         
     ''').to_df()
+#%%
 
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_pairs_soft_jaccard  A
+    LEFT JOIN tbl_entities_pairs_jaccard B
+    ON A.entity_id_1 = B.entity_id_1
+    AND A.entity_id_2 = B.entity_id_2
+    WHERE B.entity_id_1 IS NULL
+    ORDER BY A.soft_jaccard_similarity DESC              
+    ''').to_df()
+#%%
+
+df = conn.sql('''
+   WITH similarity AS (
+        SELECT 
+            t1.entity_id    AS entity_id_1,
+            t1.entity_name  AS entity_name_1,
+            t2.entity_id    AS entity_id_2,
+            t2.entity_name  AS entity_name_2,
+            t1.nb_tokens    AS nb_tokens_1,
+            t2.nb_tokens    AS nb_tokens_2, 
+            t1.token        AS token_1,
+            t2.token        AS token_2,
+            jaro_winkler_similarity(t1.token, t2.token) AS similarity
+        FROM tbl_entities_tokens t1
+        INNER JOIN tbl_entities_tokens t2
+        ON t1.entity_id < t2.entity_id
+        AND t1.partition_criteria = t2.partition_criteria
+        WHERE entity_id_1 = 1644406 AND entity_id_2 = 2028315                
+        )
+    ,ranked AS (
+        SELECT *
+        FROM 
+        (
+            SELECT 
+                entity_id_1,
+                entity_name_1,
+                entity_id_2,
+                entity_name_2,
+                nb_tokens_1,
+                nb_tokens_2,
+                token_1,
+                token_2,
+                similarity,
+                ROW_NUMBER() OVER (PARTITION BY entity_id_1, entity_id_2, token_1 ORDER BY similarity DESC) AS rank
+            FROM similarity
+        ) sub
+        WHERE rank = 1
+       )
+    SELECT *
+    FROM ranked
+    ''').to_df()
+#%%
+df = conn.sql('''
+    SELECT jaro_winkler_similarity('la', 'melisa') AS similarity
+    ''').to_df()
+
+#%%
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_pairs_soft_jaccard
+    WHERE soft_jaccard_similarity > 1
+    ''').to_df()
 # %%
