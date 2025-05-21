@@ -45,10 +45,15 @@ def load_entities_from_csv():
     conn.sql(
     """
         INSERT INTO tbl_entities (entity_id, entity_name, partition_criteria, cluster_id)
+        WITH limit_rows AS (
+            SELECT DISTINCT cluster_id
+            FROM df
+            LIMIT """ + str(limit_rows) + """
+        )
         SELECT DISTINCT MIN(entity_id), entity_name, partition_criteria, cluster_id
         FROM df
+        WHERE cluster_id IN (SELECT cluster_id FROM limit_rows)
         GROUP BY entity_name, partition_criteria, cluster_id
-        LIMIT """ + str(limit_rows) + """;
     """
     )
 
@@ -74,7 +79,7 @@ def identify_candidate_pairs():
     """
     Tokenise each entity name in the table tbl_entities
     Compute pairwise Jaccard similarity between all entities within the same partition
-    Discard all entities for which the Jaccard similarity is below a given threshold
+    Discard all entities for which the Jaccard similarity is below a given jaccard_threshold
     Persist the pairs to a new table named tbl_entities_candidate_pairs
     """
     
@@ -83,7 +88,6 @@ def identify_candidate_pairs():
     config_files = config.read('../config.ini')
 
     db_path = config['DATABASE']['db_path']
-    threshold = config['PARAMETERS']['threshold']
 
     # Create a connection to the DuckDB database
     conn = duckdb.connect(db_path)
@@ -116,8 +120,28 @@ def identify_candidate_pairs():
         ) Y;
     """
     )
+    conn.commit()
+    conn.close()    
+
+def jaccard_similarity():
+    """
+    Tokenise each entity name in the table tbl_entities
+    Compute pairwise Jaccard similarity between all entities within the same partition
+    Discard all entities for which the Jaccard similarity is below a given jaccard_threshold
+    Persist the pairs to a new table named tbl_entities_candidate_pairs
+    """
     
-    #Approach 1 - Jaccard similarity
+    # Get configurations
+    config = configparser.ConfigParser()
+    config_files = config.read('../config.ini')
+
+    db_path = config['DATABASE']['db_path']
+    jaccard_threshold = config['PARAMETERS']['jaccard_threshold']
+
+    # Create a connection to the DuckDB database
+    conn = duckdb.connect(db_path)   
+
+    #Jaccard similarity
     # Create the table tbl_entities_candidate_pairs
     # This table contains the pairs of entities with a Jaccard similarity
     conn.sql(
@@ -141,11 +165,32 @@ def identify_candidate_pairs():
         ,t2.entity_name
         ,t1.nb_tokens
         ,t2.nb_tokens   
-    HAVING jaccard_similarity >= """ + str(threshold) + """     
+    HAVING jaccard_similarity >= """ + str(jaccard_threshold) + """     
     """
     )
+    conn.commit()
+    conn.close()        
 
-    #Approach2 - Soft Jaccard with Jaro Winkler
+def soft_jaccard_similarity():
+    """
+    Tokenise each entity name in the table tbl_entities
+    Compute pairwise Soft Jaccard similarity between all entities within the same partition
+    Discard all entities for which the Jaccard similarity is below a given jaccard_threshold
+    Persist the pairs to a new table named tbl_entities_candidate_pairs
+    """
+    
+    # Get configurations
+    config = configparser.ConfigParser()
+    config_files = config.read('../config.ini')
+
+    db_path = config['DATABASE']['db_path']
+    jaccard_threshold = config['PARAMETERS']['jaccard_threshold']
+    jaro_winkler_threshold = config['PARAMETERS']['jaro_winkler_threshold']
+
+    # Create a connection to the DuckDB database
+    conn = duckdb.connect(db_path)   
+
+    #Soft Jaccard with Jaro Winkler
     # Create the table tbl_entities_candidate_pairs
     # This table contains the pairs of entities with a Soft Jaccard similarity
 
@@ -181,29 +226,39 @@ def identify_candidate_pairs():
                 nb_tokens_1,
                 nb_tokens_2,
                 similarity,
-                ROW_NUMBER() OVER (PARTITION BY entity_id_1, entity_id_2, token_1 ORDER BY similarity DESC) AS rank
+                ROW_NUMBER() OVER (PARTITION BY entity_id_1, entity_id_2, token_1 ORDER BY similarity DESC) AS rank_t1,
+                ROW_NUMBER() OVER (PARTITION BY entity_id_1, entity_id_2, token_2 ORDER BY similarity DESC) AS rank_t2                
             FROM similarity
         ) sub
-        WHERE rank = 1
+    ),max_rank AS (
+        SELECT 
+                entity_id_1,
+                entity_name_1,
+                entity_id_2,
+                entity_name_2,
+                nb_tokens_1,
+                nb_tokens_2,
+                (SUM(CASE WHEN rank_t1 = 1 AND similarity > """ + str(jaro_winkler_threshold) + """  THEN similarity ELSE 0 END)+            
+                 SUM(CASE WHEN rank_t2 = 1 AND similarity > """ + str(jaro_winkler_threshold) + """  THEN similarity ELSE 0 END))*0.5 AS Z
+        FROM ranked
+        GROUP BY 
+                entity_id_1,
+                entity_name_1,
+                entity_id_2,
+                entity_name_2,
+                nb_tokens_1,
+                nb_tokens_2               
     )  
     SELECT 
         entity_id_1,
         entity_name_1,
         entity_id_2,
         entity_name_2,
-        SUM(similarity)/(nb_tokens_1 + nb_tokens_2 - COUNT(*)) AS soft_jaccard_similarity
-    FROM ranked
-    GROUP BY 
-        entity_id_1,
-        entity_name_1,
-        entity_id_2,
-        entity_name_2,
-        nb_tokens_1,
-        nb_tokens_2, 
-    HAVING soft_jaccard_similarity >= """ + str(threshold) + """     
+        Z/(nb_tokens_1 + nb_tokens_2 - Z) AS soft_jaccard_similarity
+    FROM max_rank
+    WHERE soft_jaccard_similarity >= """ + str(jaccard_threshold) + """     
     """
     )
-    #%%
 
     conn.commit()
     conn.close()
