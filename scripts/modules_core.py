@@ -11,7 +11,6 @@ def load_entities_from_csv():
     Load entities from a CSV files
     """
 
-    #%%
     # Get configurations
     config = configparser.ConfigParser()
     config_files = config.read('../config.ini')
@@ -128,31 +127,40 @@ def jaccard_similarity():
     #Jaccard similarity
     # Create the table tbl_entities_candidate_pairs
     # This table contains the pairs of entities with a Jaccard similarity
-    conn.sql(
-    """
-    INSERT INTO tbl_entities_pairs_jaccard (entity_id_1,entity_name_1,entity_id_2,entity_name_2,similarity)    
-    SELECT 
-        t1.entity_id    AS entity_id_1,
-        t1.entity_name  AS entity_name_1,
-        t2.entity_id    AS entity_id_2,
-        t2.entity_name  AS entity_name_2,
-        COUNT(*)/(t1.nb_tokens + t2.nb_tokens - COUNT(*)) AS jaccard_similarity
-    FROM tbl_entities_tokens t1
-    INNER JOIN tbl_entities_tokens t2
-    ON t1.entity_id < t2.entity_id
-    AND t1.partition_criteria = t2.partition_criteria
-    AND t1.token = t2.token
-    GROUP BY 
-        t1.entity_id 
-        ,t1.entity_name 
-        ,t2.entity_id 
-        ,t2.entity_name
-        ,t1.nb_tokens
-        ,t2.nb_tokens   
-    HAVING jaccard_similarity >= """ + str(jaccard_threshold) + """     
-    """
-    )
-    conn.commit()
+
+    entities_list = conn.sql('''
+    SELECT DISTINCT entity_id FROM tbl_entities
+    ''').to_df()
+
+    for current_entity in entities_list['entity_id']:
+
+        conn.sql(
+        """
+        INSERT INTO tbl_entities_pairs_jaccard (entity_id_1,entity_name_1,entity_id_2,entity_name_2,similarity)    
+        SELECT 
+            t1.entity_id    AS entity_id_1,
+            t1.entity_name  AS entity_name_1,
+            t2.entity_id    AS entity_id_2,
+            t2.entity_name  AS entity_name_2,
+            COUNT(*)/(t1.nb_tokens + t2.nb_tokens - COUNT(*)) AS jaccard_similarity
+        FROM tbl_entities_tokens t1
+        INNER JOIN tbl_entities_tokens t2
+        ON t1.entity_id < t2.entity_id
+        AND t1.partition_criteria = t2.partition_criteria
+        AND t1.token = t2.token
+        WHERE t1.entity_id = """ + str(current_entity) + """
+        GROUP BY 
+            t1.entity_id 
+            ,t1.entity_name 
+            ,t2.entity_id 
+            ,t2.entity_name
+            ,t1.nb_tokens
+            ,t2.nb_tokens   
+        HAVING jaccard_similarity >= """ + str(jaccard_threshold) + """     
+        """
+        )
+        conn.commit()
+
     conn.close()        
 
 
@@ -178,72 +186,78 @@ def soft_jaccard_similarity():
     # Create the table tbl_entities_candidate_pairs
     # This table contains the pairs of entities with a Soft Jaccard similarity
 
-    #%%
-    conn.sql(
-    """
-    INSERT INTO tbl_entities_pairs_soft_jaccard (entity_id_1,entity_name_1,entity_id_2,entity_name_2,similarity)  
-    WITH similarity AS (
-        SELECT 
-            t1.entity_id    AS entity_id_1,
-            t1.entity_name  AS entity_name_1,
-            t2.entity_id    AS entity_id_2,
-            t2.entity_name  AS entity_name_2,
-            t1.nb_tokens    AS nb_tokens_1,
-            t2.nb_tokens    AS nb_tokens_2, 
-            t1.token        AS token_1,
-            t2.token        AS token_2,
-            jaro_winkler_similarity(t1.token, t2.token) AS similarity
-        FROM tbl_entities_tokens t1
-        INNER JOIN tbl_entities_tokens t2
-        ON t1.entity_id < t2.entity_id
-        AND t1.partition_criteria = t2.partition_criteria
-        )
-    ,ranked AS (
-        SELECT *
-        FROM 
-        (
-            SELECT 
-                entity_id_1,
-                entity_name_1,
-                entity_id_2,
-                entity_name_2,
-                nb_tokens_1,
-                nb_tokens_2,
-                similarity,
-                ROW_NUMBER() OVER (PARTITION BY entity_id_1, entity_id_2, token_1 ORDER BY similarity DESC) AS rank_t1,
-                ROW_NUMBER() OVER (PARTITION BY entity_id_1, entity_id_2, token_2 ORDER BY similarity DESC) AS rank_t2                
-            FROM similarity
-        ) sub
-    ),max_rank AS (
-        SELECT 
-                entity_id_1,
-                entity_name_1,
-                entity_id_2,
-                entity_name_2,
-                nb_tokens_1,
-                nb_tokens_2,
-                (SUM(CASE WHEN rank_t1 = 1 AND similarity > """ + str(jaro_winkler_threshold) + """  THEN similarity ELSE 0 END)+            
-                 SUM(CASE WHEN rank_t2 = 1 AND similarity > """ + str(jaro_winkler_threshold) + """  THEN similarity ELSE 0 END))*0.5 AS Z
-        FROM ranked
-        GROUP BY 
-                entity_id_1,
-                entity_name_1,
-                entity_id_2,
-                entity_name_2,
-                nb_tokens_1,
-                nb_tokens_2               
-    )  
-    SELECT 
-        entity_id_1,
-        entity_name_1,
-        entity_id_2,
-        entity_name_2,
-        Z/(nb_tokens_1 + nb_tokens_2 - Z) AS soft_jaccard_similarity
-    FROM max_rank
-    WHERE soft_jaccard_similarity >= """ + str(jaccard_threshold) + """     
-    """
-    )
+    entities_list = conn.sql('''
+    SELECT DISTINCT entity_id FROM tbl_entities
+    ''').to_df()
 
-    conn.commit()
+    for current_entity in entities_list['entity_id']:    
+
+        conn.sql(
+        """
+        INSERT INTO tbl_entities_pairs_soft_jaccard (entity_id_1,entity_name_1,entity_id_2,entity_name_2,similarity)  
+        WITH similarity AS (
+            SELECT 
+                t1.entity_id    AS entity_id_1,
+                t1.entity_name  AS entity_name_1,
+                t2.entity_id    AS entity_id_2,
+                t2.entity_name  AS entity_name_2,
+                t1.nb_tokens    AS nb_tokens_1,
+                t2.nb_tokens    AS nb_tokens_2, 
+                t1.token        AS token_1,
+                t2.token        AS token_2,
+                jaro_winkler_similarity(t1.token, t2.token) AS similarity
+            FROM tbl_entities_tokens t1
+            INNER JOIN tbl_entities_tokens t2
+            ON t1.entity_id < t2.entity_id
+            AND t1.partition_criteria = t2.partition_criteria
+            WHERE t1.entity_id = """ + str(current_entity) + """
+            )
+        ,ranked AS (
+            SELECT *
+            FROM 
+            (
+                SELECT 
+                    entity_id_1,
+                    entity_name_1,
+                    entity_id_2,
+                    entity_name_2,
+                    nb_tokens_1,
+                    nb_tokens_2,
+                    similarity,
+                    ROW_NUMBER() OVER (PARTITION BY entity_id_1, entity_id_2, token_1 ORDER BY similarity DESC) AS rank_t1,
+                    ROW_NUMBER() OVER (PARTITION BY entity_id_1, entity_id_2, token_2 ORDER BY similarity DESC) AS rank_t2                
+                FROM similarity
+            ) sub
+        ),max_rank AS (
+            SELECT 
+                    entity_id_1,
+                    entity_name_1,
+                    entity_id_2,
+                    entity_name_2,
+                    nb_tokens_1,
+                    nb_tokens_2,
+                    (SUM(CASE WHEN rank_t1 = 1 AND similarity > """ + str(jaro_winkler_threshold) + """  THEN similarity ELSE 0 END)+            
+                    SUM(CASE WHEN rank_t2 = 1 AND similarity > """ + str(jaro_winkler_threshold) + """  THEN similarity ELSE 0 END))*0.5 AS Z
+            FROM ranked
+            GROUP BY 
+                    entity_id_1,
+                    entity_name_1,
+                    entity_id_2,
+                    entity_name_2,
+                    nb_tokens_1,
+                    nb_tokens_2               
+        )  
+        SELECT 
+            entity_id_1,
+            entity_name_1,
+            entity_id_2,
+            entity_name_2,
+            Z/(nb_tokens_1 + nb_tokens_2 - Z) AS soft_jaccard_similarity
+        FROM max_rank
+        WHERE soft_jaccard_similarity >= """ + str(jaccard_threshold) + """     
+        """
+        )
+        conn.commit()
+
     conn.close()
 

@@ -240,6 +240,68 @@ df = conn.sql('''
     HAVING COUNT(DISTINCT entity_id) > 1
     
     ''').to_df()
+#%%
+df = conn.sql('''
+    SELECT entity_id FROM tbl_entities
+    EXCEPT
+    SELECT *
+    FROM (
+         SELECT entity_id_1 AS entity_id FROM tbl_entities_pairs_soft_jaccard
+         UNION
+         SELECT entity_id_2 AS entity_id FROM tbl_entities_pairs_soft_jaccard
+         ) AS t     
+    ''').to_df()
 
+#%%
+df = conn.sql('''
 
+         SELECT entity_id_1 AS entity_id FROM tbl_entities_pairs_soft_jaccard
+         UNION
+         SELECT entity_id_2 AS entity_id FROM tbl_entities_pairs_soft_jaccard
+    
+    ''').to_df()
+
+#%%
+df = conn.sql('''
+
+SELECT * FROM tbl_entities
+    ''').to_df()
+
+#%%
+df = conn.sql('''
+
+SELECT * FROM tbl_entities_pairs_soft_jaccard
+    ''').to_df()
+
+#%%
+df = conn.sql('''
+
+SELECT COUNT(*) FROM tbl_entities_pairs_soft_jaccard
+    ''').to_df()
 # %%
+#%%
+df = conn.sql('''
+    SELECT entity_id
+    FROM tbl_entities
+    WHERE cluster_id IN
+        (
+        SELECT cluster_id
+        FROM tbl_entities
+        GROUP BY cluster_id
+        HAVING COUNT(DISTINCT entity_id) > 1
+        ) 
+    EXCEPT
+    SELECT *
+    FROM (
+         SELECT entity_id_1 AS entity_id FROM tbl_entities_pairs_soft_jaccard
+         UNION
+         SELECT entity_id_2 AS entity_id FROM tbl_entities_pairs_soft_jaccard
+         ) AS t               
+    ''').to_df()
+  
+#%%
+conn.close()
+# %%
+
+
+4830075
