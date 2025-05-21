@@ -22,7 +22,6 @@ def load_entities_from_csv():
 
     # Create a connection to the DuckDB database
     conn = duckdb.connect(db_path)
-    #%%
 
     # Load files from the folder
     id = 0
@@ -36,7 +35,7 @@ def load_entities_from_csv():
                 next(reader, None)  # Skip header row
                 for row in reader:
                     #row.append(filename)
-                    entities.append([id,' '.join(row[1:4]), row[4] , row[0]]) #recid,givenname,surname,suburb,postcode
+                    entities.append([id,' '.join(row[1:5]), 'partition1' , row[0]]) #recid,givenname,surname,suburb,postcode
                     id += 1
 
     df = pd.DataFrame(entities, columns=['entity_id', 'entity_name', 'partition_criteria', 'cluster_id'])
@@ -54,33 +53,18 @@ def load_entities_from_csv():
         FROM df
         WHERE cluster_id IN (SELECT cluster_id FROM limit_rows)
         GROUP BY entity_name, partition_criteria, cluster_id
+
     """
     )
-
-    # Drop cluster where mispelling is on post code so that we can use the post code as partion criteria
-
-    conn.sql('''
-        DELETE FROM tbl_entities
-        USING (
-            SELECT cluster_id
-            FROM tbl_entities
-            GROUP BY cluster_id
-            HAVING COUNT(DISTINCT partition_criteria) > 1
-        ) AS to_delete
-        WHERE tbl_entities.cluster_id = to_delete.cluster_id
-    ''')
 
     conn.commit()
     conn.close()
 
 
 
-def identify_candidate_pairs():
+def tokenize():
     """
     Tokenise each entity name in the table tbl_entities
-    Compute pairwise Jaccard similarity between all entities within the same partition
-    Discard all entities for which the Jaccard similarity is below a given jaccard_threshold
-    Persist the pairs to a new table named tbl_entities_candidate_pairs
     """
     
     # Get configurations
@@ -98,7 +82,7 @@ def identify_candidate_pairs():
     # Token splitting is done on space. Leading and trailing special characters are removed
     conn.sql(
     """
-    CREATE TABLE tbl_entities_tokens AS
+    INSERT INTO tbl_entities_tokens (entity_id, entity_name, partition_criteria, cluster_id, token, nb_tokens)
     SELECT *, COUNT(DISTINCT token) OVER (PARTITION BY entity_id) AS nb_tokens
     FROM (
         SELECT
@@ -123,12 +107,12 @@ def identify_candidate_pairs():
     conn.commit()
     conn.close()    
 
+
+
 def jaccard_similarity():
     """
-    Tokenise each entity name in the table tbl_entities
     Compute pairwise Jaccard similarity between all entities within the same partition
     Discard all entities for which the Jaccard similarity is below a given jaccard_threshold
-    Persist the pairs to a new table named tbl_entities_candidate_pairs
     """
     
     # Get configurations
@@ -146,7 +130,7 @@ def jaccard_similarity():
     # This table contains the pairs of entities with a Jaccard similarity
     conn.sql(
     """
-    CREATE TABLE tbl_entities_pairs_jaccard AS    
+    INSERT INTO tbl_entities_pairs_jaccard (entity_id_1,entity_name_1,entity_id_2,entity_name_2,similarity)    
     SELECT 
         t1.entity_id    AS entity_id_1,
         t1.entity_name  AS entity_name_1,
@@ -171,12 +155,12 @@ def jaccard_similarity():
     conn.commit()
     conn.close()        
 
+
+
 def soft_jaccard_similarity():
     """
-    Tokenise each entity name in the table tbl_entities
     Compute pairwise Soft Jaccard similarity between all entities within the same partition
-    Discard all entities for which the Jaccard similarity is below a given jaccard_threshold
-    Persist the pairs to a new table named tbl_entities_candidate_pairs
+    Discard all entities for which the soft Jaccard similarity is below a given jaccard_threshold
     """
     
     # Get configurations
@@ -197,7 +181,7 @@ def soft_jaccard_similarity():
     #%%
     conn.sql(
     """
-    CREATE TABLE tbl_entities_pairs_soft_jaccard AS  
+    INSERT INTO tbl_entities_pairs_soft_jaccard (entity_id_1,entity_name_1,entity_id_2,entity_name_2,similarity)  
     WITH similarity AS (
         SELECT 
             t1.entity_id    AS entity_id_1,

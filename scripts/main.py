@@ -5,7 +5,7 @@ import os
 
 setup_database()
 load_entities_from_csv()
-identify_candidate_pairs()
+tokenize()
 #jaccard_similarity()
 soft_jaccard_similarity()
 

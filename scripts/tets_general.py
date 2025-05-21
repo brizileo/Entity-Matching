@@ -212,3 +212,34 @@ df = conn.sql('''
     WHERE soft_jaccard_similarity > 1
     ''').to_df()
 # %%
+
+#%%
+df = conn.sql('''
+    SELECT B.*,A1.cluster_id AS cluster_id1, A2.cluster_id AS cluster_id2
+    FROM tbl_entities_pairs_soft_jaccard B
+    LEFT JOIN tbl_entities A1
+    ON B.entity_id_1 = A1.entity_id
+    LEFT JOIN tbl_entities A2
+    ON B.entity_id_2 = A2.entity_id
+    ORDER BY similarity ASC
+    LIMIT 1000
+    ''').to_df()
+#%%
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities A1
+    WHERE A1.cluster_id IN (7754527)
+    
+    ''').to_df()
+
+#%%
+df = conn.sql('''
+    SELECT cluster_id
+    FROM tbl_entities A1
+    GROUP BY cluster_id
+    HAVING COUNT(DISTINCT entity_id) > 1
+    
+    ''').to_df()
+
+
+# %%
