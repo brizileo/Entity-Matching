@@ -12,8 +12,8 @@ $$
 
 $$
 Z = \frac{
-  \sum_{i=1}^{|a|} \max_{j=1}^{|b|} (jw_{a_i, b_j}) +
-  \sum_{j=1}^{|b|} \max_{i=1}^{|a|} (jw_{a_i, b_j})
+  \sum_{i=1}^{|a|} \max_{j=1}^{|b|} (w_{a_i, b_j}) +
+  \sum_{j=1}^{|b|} \max_{i=1}^{|a|} (w_{a_i, b_j})
 }{2}
 $$
 
