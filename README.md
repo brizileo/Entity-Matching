@@ -12,10 +12,12 @@ $$
 
 $$
 Z = \frac{
-\sum_{i=1}^{|a|} \max_{j=1}^{|b|} (s'_{a_i, b_j}) + \sum_{j=1}^{|b|} \max_{i=1}^{|a|} (s'_{a_i, b_j})
-}{2}.
+  \sum_{i=1}^{|a|} \max_{j=1}^{|b|} (jw_{a_i, b_j}) +
+  \sum_{j=1}^{|b|} \max_{i=1}^{|a|} (jw_{a_i, b_j})
+}{2}
 $$
-where quantities |a|and |b|represent the number of tokens in strings a and b, respectively and the quantity Z captures the similarity between tokens from string a matching in string b, and from string b matching in string a. 
+
+where quantities |a| and |b| represent the number of tokens in strings a and b, respectively and the quantity Z captures the similarity between tokens from string a matching in string b, and from string b matching in string a. 
 
 Each candidate pair is then reviewed by a Language Model to assess whether the match is correct. 
 Once the matches are verified, entites are clustered via a connected components algorithm (WIP)
