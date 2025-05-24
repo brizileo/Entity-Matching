@@ -10,4 +10,6 @@ tokenize()
 soft_jaccard_similarity()
 pairs_validation()
 
+print("All processes completed successfully.")
+
 # %%

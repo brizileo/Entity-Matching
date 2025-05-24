@@ -6,6 +6,7 @@ import configparser
 import pandas as pd
 import yaml
 from ollama import generate
+from tqdm import tqdm
 #%%
 
 def load_entities_from_csv():
@@ -134,8 +135,10 @@ def jaccard_similarity():
     SELECT DISTINCT entity_id FROM tbl_entities
     ''').to_df()
 
-    for current_entity in entities_list['entity_id']:
+    total_pairs = len(entities_list)
+    pbar = tqdm(total=total_pairs, desc="Computing jaccard similarity of candidate pairs")
 
+    for current_entity in entities_list['entity_id']:
         conn.sql(
         """
         INSERT INTO tbl_entities_pairs_jaccard (entity_id_1,entity_name_1,entity_id_2,entity_name_2,similarity)    
@@ -162,7 +165,9 @@ def jaccard_similarity():
         """
         )
         conn.commit()
+        pbar.update(1)
 
+    pbar.close()
     conn.close()        
 
 
@@ -191,6 +196,9 @@ def soft_jaccard_similarity():
     entities_list = conn.sql('''
     SELECT DISTINCT entity_id FROM tbl_entities
     ''').to_df()
+
+    total_pairs = len(entities_list)
+    pbar = tqdm(total=total_pairs, desc="Computing soft jaccard similarity of candidate pairs")
 
     for current_entity in entities_list['entity_id']:    
 
@@ -260,7 +268,9 @@ def soft_jaccard_similarity():
         """
         )
         conn.commit()
+        pbar.update(1)
 
+    pbar.close()
     conn.close()
 
 
@@ -283,16 +293,20 @@ def pairs_validation(similarity_model='soft_jaccard'):
     # Read and parse the prompt_library.yaml file
     with open('../prompts_library.yaml', 'r', encoding='utf-8') as f:
         prompt_library = yaml.safe_load(f)
-
-
+    
+    # Get total number of pairs for progress bar
+    total_pairs = cursor.execute('''
+        SELECT COUNT(*) FROM tbl_entities_pairs_''' + similarity_model + '''
+    ''').fetchone()[0]
+    
+    # Loop through the pairs of entities
     pairs_list = cursor.execute('''
     SELECT DISTINCT entity_id_1,entity_name_1,entity_id_2,entity_name_2,similarity
     FROM tbl_entities_pairs_''' + similarity_model + '''
     ''')
-    
-    # Loop through the pairs and validate them using the Ollama API
-    
+
     row = pairs_list.fetchone()
+    pbar = tqdm(total=total_pairs, desc="Validating candidate pairs with AI model")
 
     while row is not None:
         entity_id_1 = row[0]
@@ -309,13 +323,14 @@ def pairs_validation(similarity_model='soft_jaccard'):
         # Call the Ollama API
         response = generate('phi4-mini', prompt)
 
-
         conn.execute('''
             INSERT INTO tbl_entities_pairs_validated (entity_id_1, entity_name_1, entity_id_2, entity_name_2, similarity, validation)
             VALUES(?,?, ?, ?, ?, ?)
         ''', [entity_id_1, entity_name_1, entity_id_2, entity_name_2, similarity, response['response']])
   
         row = pairs_list.fetchone()
+        pbar.update(1)
+    pbar.close()
 
     conn.commit()
     conn.close()
