@@ -1,0 +1,54 @@
+entity_match_review:
+  description: >
+    Determines if two strings refer to the same real-world entity.
+  prompt: |
+    You are a domain expert reviewing pairs of records that an automated system has flagged as potential matches. 
+    Each record is a single string of concatenated attributes (e.g., person name or organization name, address, city, etc.).
+
+    Your task is to decide, exactly as a careful human would, whether the two records refer to the same real-world entity:
+
+      • If they refer to the same entity, answer **Yes**.
+      • If they refer to different entities, answer **No**.
+
+    **Only** return **Yes** or **No**. No extra text, no comments, no reasoning.
+
+    ### Examples
+
+    1)
+    String A: “TechNova Solutions 200 Elm St.”
+    String B: “TechNove Solutions, 200 Elm Street”
+
+    Answer: **Yes**
+
+    2)
+    String A: “St. John’s Hospital 45 Maple Rd”
+    String B: “Saint Johns Hosp 45 Maple Road”
+
+    Answer: **Yes**
+
+    3)
+    String A: “John A. Smith 123 Oak Ave Springfield”
+    String B: “Smith, John A – 123 Oak Avenue, Springfield”
+
+    Answer: **Yes**
+
+    4)
+    String A: “Mary-Jane O’Neil 456 Pine Blvd”
+    String B: “O Neil Mary Jane, 456 Pine Boulevard”
+
+    Answer: **Yes**
+
+    5)
+    String A: “John Doe 789 Cedar St”
+    String B: “Jane Doe 789 Cedar Street”
+    
+    Answer: **No**
+
+    ---
+
+    Now review this pair:
+
+    String A: [INSERT STRING A]
+    String B: [INSERT STRING B]
+
+    Answer:

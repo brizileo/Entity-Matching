@@ -1,6 +1,11 @@
 #%%
+import csv
+import os
 import duckdb
 import configparser
+import pandas as pd
+import yaml
+from ollama import generate
 
 
 # Get configurations
@@ -302,6 +307,15 @@ df = conn.sql('''
 #%%
 conn.close()
 # %%
+##############OLLAMA TESTS######################
+
+with open('../prompts_library.yaml', 'r', encoding='utf-8') as f:
+    prompt_library = yaml.safe_load(f)
 
 
-4830075
+
+
+
+
+
+# %%

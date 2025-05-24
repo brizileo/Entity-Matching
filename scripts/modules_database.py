@@ -71,6 +71,19 @@ def setup_database():
         );
     """)   
 
+     # Create tbl_entities_pairs_validated
+    conn.execute("DROP TABLE IF EXISTS tbl_entities_pairs_validated;")
+    conn.execute("""
+        CREATE TABLE tbl_entities_pairs_validated (
+            entity_id_1      INTEGER
+            ,entity_name_1   VARCHAR
+            ,entity_id_2     INTEGER
+            ,entity_name_2   VARCHAR
+            ,similarity      FLOAT
+            ,validation      VARCHAR
+        );
+    """)   
+
     conn.commit()
     conn.close()
 
