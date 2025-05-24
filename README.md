@@ -22,6 +22,15 @@ where quantities |a| and |b| represent the number of tokens in strings a and b, 
 Each candidate pair is then reviewed by a Language Model to assess whether the match is correct. 
 Once the matches are verified, entites are clustered via a connected components algorithm (WIP)
 
+### Setup
+
+The application requires Ollama and Phi4-mini model: `ollama pull phi4-mini`
+
+Start the Ollama server to enable API interaction: `ollama serve`
+
+Verify Ollama is running: `curl http://localhost:11434` shoul return `Ollama is running`
+
+
 ### 📄 References
 
 [Combining Multiple String Similarity Metrics for Effective Toponym Matching](https://eprints.lancs.ac.uk/id/eprint/89481/1/Manusc_Combining_Multiple_String_Similarity_Metrics_for_Effective_Toponym_Matching.pdf)  

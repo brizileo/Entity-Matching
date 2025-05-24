@@ -8,5 +8,8 @@ load_entities_from_csv()
 tokenize()
 #jaccard_similarity()
 soft_jaccard_similarity()
+pairs_validation()
+
+print("All processes completed successfully.")
 
 # %%
