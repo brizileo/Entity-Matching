@@ -281,7 +281,7 @@ SELECT * FROM tbl_entities_pairs_soft_jaccard
 #%%
 df = conn.sql('''
 
-SELECT COUNT(*) FROM tbl_entities_pairs_soft_jaccard
+SELECT * FROM tbl_entities_pairs_validated
     ''').to_df()
 # %%
 #%%

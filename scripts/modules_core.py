@@ -4,6 +4,8 @@ import os
 import duckdb
 import configparser
 import pandas as pd
+import yaml
+from ollama import generate
 #%%
 
 def load_entities_from_csv():
@@ -261,3 +263,62 @@ def soft_jaccard_similarity():
 
     conn.close()
 
+
+def pairs_validation(similarity_model='soft_jaccard'):
+    """
+    Validate the pairs of entities using the Ollama API
+    Takes as input the similarity model to use e.g. either 'jaccard' or 'soft_jaccard'
+    """
+
+    # Get configurations
+    config = configparser.ConfigParser()
+    config_files = config.read('../config.ini')
+
+    db_path = config['DATABASE']['db_path']
+
+    # Create a connection to the DuckDB database
+    conn = duckdb.connect(db_path)   
+    cursor = conn.cursor() 
+    
+    # Read and parse the prompt_library.yaml file
+    with open('../prompts_library.yaml', 'r', encoding='utf-8') as f:
+        prompt_library = yaml.safe_load(f)
+
+
+    pairs_list = cursor.execute('''
+    SELECT DISTINCT entity_id_1,entity_name_1,entity_id_2,entity_name_2,similarity
+    FROM tbl_entities_pairs_''' + similarity_model + '''
+    ''')
+    
+    # Loop through the pairs and validate them using the Ollama API
+    
+    row = pairs_list.fetchone()
+
+    while row is not None:
+        entity_id_1 = row[0]
+        entity_name_1 = row[1]
+        entity_id_2 = row[2]
+        entity_name_2 = row[3]
+        similarity = row[4]
+
+        # Prepare the prompt
+        prompt = prompt_library['entity_match_review']['prompt']
+        prompt = prompt.replace('[INSERT STRING A]', entity_name_1)
+        prompt = prompt.replace('[INSERT STRING B]', entity_name_2)
+        
+        # Call the Ollama API
+        response = generate('phi4-mini', prompt)
+
+
+        conn.execute('''
+            INSERT INTO tbl_entities_pairs_validated (entity_id_1, entity_name_1, entity_id_2, entity_name_2, similarity, validation)
+            VALUES(?,?, ?, ?, ?, ?)
+        ''', [entity_id_1, entity_name_1, entity_id_2, entity_name_2, similarity, response['response']])
+  
+        row = pairs_list.fetchone()
+
+    conn.commit()
+    conn.close()
+
+
+# %%

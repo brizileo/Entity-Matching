@@ -2,49 +2,52 @@ entity_match_review:
   description: >
     Determines if two strings refer to the same real-world entity.
   prompt: |
-    You are a domain expert reviewing pairs of records that an automated system has flagged as potential matches. 
-    Each record is a single string of concatenated attributes (e.g., person name or organization name, address, city, etc.).
+    You are a careful assistant reviewing pairs of strings that describe real-world entities. Each string includes concatenated attributes like names, addresses, cities, ZIP/postal codes, or phone numbers.
 
-    Your task is to decide, exactly as a careful human would, whether the two records refer to the same real-world entity:
+    Your job is to decide if the two strings refer to the same real-world entity, even if they are written differently.
 
-      • If they refer to the same entity, answer **Yes**.
-      • If they refer to different entities, answer **No**.
+    Matching Guidelines:
+    Consider two strings to refer to the same entity if:
 
-    **Only** return **Yes** or **No**. No extra text, no comments, no reasoning.
+    They describe the same person, organization, or place, even if formatted differently.
+    They have:
+    Variations in punctuation, casing, word order, or abbreviations
+    Minor typos or misspellings (e.g., "mardha" vs "martha")
+    Small character-level differences in numbers (e.g., ZIP codes or address numbers differ by 1–2 characters or digits), especially if all other information matches
+    Differences that resemble common typing or OCR errors (e.g., “z” vs “2”)
+    Consider the strings to refer to different entities if:
 
-    ### Examples
+    There are multiple or conflicting differences in names, locations, or other key attributes
+    The differences suggest two distinct people, places, or organizations — not just alternate spellings or typos
+    Use judgment like a careful human would: tolerant of small errors, but only if the overall context aligns.
 
-    1)
-    String A: “TechNova Solutions 200 Elm St.”
-    String B: “TechNove Solutions, 200 Elm Street”
+    Response Format:
+    Only respond with:
 
-    Answer: **Yes**
+    Yes – if they refer to the same real-world entity
+    No – if they refer to different entities
+    No extra text, comments, or reasoning.
 
-    2)
-    String A: “St. John’s Hospital 45 Maple Rd”
-    String B: “Saint Johns Hosp 45 Maple Road”
+    Examples
+    String A: “martha gwyn elk park 28622”
+    String B: “mardha gwyn elk park 286z2”
+    Answer: Yes
 
-    Answer: **Yes**
-
-    3)
-    String A: “John A. Smith 123 Oak Ave Springfield”
-    String B: “Smith, John A – 123 Oak Avenue, Springfield”
-
-    Answer: **Yes**
-
-    4)
-    String A: “Mary-Jane O’Neil 456 Pine Blvd”
-    String B: “O Neil Mary Jane, 456 Pine Boulevard”
-
-    Answer: **Yes**
-
-    5)
     String A: “John Doe 789 Cedar St”
     String B: “Jane Doe 789 Cedar Street”
-    
-    Answer: **No**
+    Answer: No
 
-    ---
+    String A: “Global Tech 4501 Elm Ave NY 10016”
+    String B: “Global Tech, 4501 Elm Avenue, New York, 10016”
+    Answer: Yes
+
+    String A: “ClearWater Co. 8001 Bay Dr 90210”
+    String B: “ClearWater Company, 8002 Bay Drive, 90210”
+    Answer: Yes
+
+    String A: “Apex Group 4512 Hwy 90”
+    String B: “Apex Health Group 4512 Highway 90”
+    Answer: No
 
     Now review this pair:
 
