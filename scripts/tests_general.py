@@ -306,16 +306,53 @@ df = conn.sql('''
   
 #%%
 conn.close()
-# %%
+
 ##############OLLAMA TESTS######################
+# %%
 
-with open('../prompts_library.yaml', 'r', encoding='utf-8') as f:
-    prompt_library = yaml.safe_load(f)
+# false negatives
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_pairs_validated    
+    WHERE validation LIKE '%Yes%' AND similarity < 0.6  
+    ''').to_df()
+
+# %%
+
+# true negatives
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_pairs_validated    
+    WHERE validation NOT LIKE '%Yes%' AND similarity < 0.6  
+    ''').to_df()
+
+# %%
+
+# true positives
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_pairs_validated    
+    WHERE validation LIKE '%Yes%' AND similarity > 0.8 
+    ''').to_df()
+
+# %%
+
+# false positives
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_pairs_validated    
+    WHERE validation NOT LIKE '%Yes%' AND similarity > 0.8
+    ''').to_df()
 
 
 
+# %%
 
 
+df = conn.sql('''
+    SELECT DISTINCT validation
+    FROM tbl_entities_pairs_validated     
+    ''').to_df()
 
 
 # %%

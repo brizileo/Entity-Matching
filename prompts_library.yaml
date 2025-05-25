@@ -2,56 +2,47 @@ entity_match_review:
   description: >
     Determines if two strings refer to the same real-world entity.
   prompt: |
-    You are a careful assistant reviewing pairs of strings that describe real-world entities. Each string includes concatenated attributes like names, addresses, cities, ZIP/postal codes, or phone numbers.
-
+    [TASK]
+    You are a careful assistant reviewing pairs of strings that describe real-world entities i.e individuals or organizations. 
+    Each string includes concatenated attributes as entity names, addresses, cities, ZIP/postal codes.
     Your job is to decide if the two strings refer to the same real-world entity, even if they are written differently.
 
-    Matching Guidelines:
-    Consider two strings to refer to the same entity if:
+    [INSTRUCTIONS]
+    
+    - Consider two strings to refer to the same entity if they describe the same individual or organization;
+    - Tolerate difference in the attributes such as punctuation, casing, word order, or abbreviations;
+    - Tolerate minor typos, minor misspellings or small differences that resemble common typing;
+    - Tolerate attributes that exists only in one string if they do not contradict the other string and they are not essential to the identity of the entity;
+    - Do not tolerate major differences in attributes like names and locations.
 
-    They describe the same person, organization, or place, even if formatted differently.
-    They have:
-    Variations in punctuation, casing, word order, or abbreviations
-    Minor typos or misspellings (e.g., "mardha" vs "martha")
-    Small character-level differences in numbers (e.g., ZIP codes or address numbers differ by 1–2 characters or digits), especially if all other information matches
-    Differences that resemble common typing or OCR errors (e.g., “z” vs “2”)
-    Consider the strings to refer to different entities if:
+    [RESPONSE]
+    Answer with either:
 
-    There are multiple or conflicting differences in names, locations, or other key attributes
-    The differences suggest two distinct people, places, or organizations — not just alternate spellings or typos
-    Use judgment like a careful human would: tolerant of small errors, but only if the overall context aligns.
+    ***Yes*** if they refer to the same real-world entity;
+    ***No***  if they refer to different entities.
 
-    Response Format:
-    Only respond with:
+    No extra text, no additional comments or reasoning.
 
-    Yes – if they refer to the same real-world entity
-    No – if they refer to different entities
-    No extra text, comments, or reasoning.
+    [EXAMPLES]
 
-    Examples
-    String A: “martha gwyn elk park 28622”
-    String B: “mardha gwyn elk park 286z2”
-    Answer: Yes
-
-    String A: “John Doe 789 Cedar St”
-    String B: “Jane Doe 789 Cedar Street”
+    String A: “John Doe New York 6020”
+    String B: “Jane Doe New York 6020”
     Answer: No
 
-    String A: “Global Tech 4501 Elm Ave NY 10016”
-    String B: “Global Tech, 4501 Elm Avenue, New York, 10016”
+    String A: “John Doe New York 6020”
+    String B: “J0ne Doe NY 60z0”
     Answer: Yes
 
     String A: “ClearWater Co. 8001 Bay Dr 90210”
     String B: “ClearWater Company, 8002 Bay Drive, 90210”
     Answer: Yes
 
-    String A: “Apex Group 4512 Hwy 90”
-    String B: “Apex Health Group 4512 Highway 90”
+    String A: “Bob Max York 6020”
+    String B: “Jane Doe New York 6020”
     Answer: No
 
-    Now review this pair:
+    [INPUT]
 
     String A: [INSERT STRING A]
     String B: [INSERT STRING B]
-
     Answer:
