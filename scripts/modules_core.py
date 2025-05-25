@@ -51,6 +51,7 @@ def load_entities_from_csv():
         WITH limit_rows AS (
             SELECT DISTINCT cluster_id
             FROM df
+            ORDER BY 1 ASC            
             LIMIT """ + str(limit_rows) + """
         )
         SELECT DISTINCT MIN(entity_id), entity_name, partition_criteria, cluster_id

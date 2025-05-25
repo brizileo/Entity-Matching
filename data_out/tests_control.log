@@ -1,93 +1,164 @@
+====================================================================================================
+Check if the the jaccard similarity threshold = 0.66 excludes true pairs:
+====================================================================================================
+   total_pairs  matched_pairs  unmatched_pairs  ratio
+0          125            107               18  0.856
 Following entities were not matched due to threshold applied to soft jaccard pairs:
-Empty DataFrame
-Columns: [entity_id]
-Index: []
+    entity_id_1                      entity_name_1  entity_id_2                     entity_name_2 cluster_id
+0       2034889         t smith kernersvolle 2728q      3049383        d smoth kernersville 27284        809
+1         65154          melv9n bazrd gaston 27832      2065235         melviny baid gaston 27832        259
+2        980233         t smith kernersville 27284      3049383        d smoth kernersville 27284        809
+3       3041676             b terrv aulander 27805      4041372            b derry aulander 27805        904
+4       1392075          g amos kernersville 27284      2044883         9 am0s kernersville 27284       1609
+5         26836       ethe| kikeah wadesboro 28170      4026964        ethl kiker wadesboro 28|70        665
+6       2254010             h terry aulander 27805      3041676            b terrv aulander 27805        904
+7       3011081    jariet daylor rich square 27869      4011107    janed taylor rich square 2786q       2073
+8          6972          k bla1<ley clemmons 27012      1327835          j blakley clemmons 27012       1536
+9       2254010             h terry aulander 27805      4041372            b derry aulander 27805        904
+10      2025087   lillie mae burnette oxfovd 27565      3025248   lillie mae burne6te oford 27565       1541
+11        41343               terty aulander 27805      2254010            h terry aulander 27805        904
+12      3054383       troy bell tayl0rsville 2868l      4054261      troy bell taylorsuille 28601       1338
+13        41343               terty aulander 27805      4041372            b derry aulander 27805        904
+14        30857   wilbur weeks scotlant neck 27878      2030891  wilbur week5 scotland neck 27824       1033
+15        41343               terty aulander 27805      3041676            b terrv aulander 27805        904
+16        55199      boyce fvssell rose bill 28458      2469862     boyce fussell rose hill 28458        154
+17      1053980       nannie worrel1 mt oliv 28365      3002187      nannie orrell mt olive 28363       1391
+----------------------------------------------------------------------------------------------------
 Confusion matrix of AI validated pairs
+----------------------------------------------------------------------------------------------------
    true_positives  false_positives  false_negatives  true_negatives
-0           215.0              5.0             54.0            80.0
-Confusion matrix of jaccard pairs with threshold 0.50
+0            94.0             49.0             13.0            16.0
+----------------------------------------------------------------------------------------------------
+Confusion matrix of Jaccard pairs with threshold 0.66
+----------------------------------------------------------------------------------------------------
    true_positives  false_positives  false_negatives  true_negatives
-0           269.0             85.0              0.0             0.0
+0           107.0             65.0                0               0
+====================================================================================================
+Inspect examples of pairs
+====================================================================================================
 
-Sample 10 pairs for category of AI validated pairs: true_positives
-   entity_id_1                         entity_name_1  entity_id_2                         entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0       356027         taylor groce jonesville 28642      2007557         taylor groce jonesvills 286q2    0.935484        Yes       7949811       7949811
-1       341430        theresa meeker asheville 28804      2072254        theresa meeker ashevi1le 2880q    0.939655        Yes       4346220       4346220
-2       324269     kelly shanahan jacksonville 28540      1051930     kelyl shanaban jacksonville 28540    0.952807        Yes       3089880       3089880
-3       387563     stephanie bagby mills river 28759      2047429    stephznie bagtby mills river 28759    0.967213        Yes        832811        832811
-4       394594         brittany mccrary hudson 28638      1046659          brttany mccrary hudson 28632    0.944895        Yes       7201830       7201830
-5       833763            jerry brown asheboro 27205      3061403           jeryr brown astheboro 27205    0.962566        Yes       6581088       6581088
-6       340059  anthony zucconi elizabeth city 27909      1007666  anthony zuccon9 elizabeth city 27g09    0.936555        Yes       5728874       5728874
-7       361083        beatrice davis louisburg 27549      4003466        beatnce daxvis louisburg 27549    0.940327        Yes       3406766       3406766
-8       380595           minnie roberts shelby 28150      2076346          minniw roberqts shelby 28150    0.955193        Yes        564090        564090
-9       406682            susan stepp matthews 28105      3075007            susan st4pp mattbews 28105    0.924619        Yes        467659        467659
+Sample 10 pairs to inspect AI validated pairs: true_positives
+   entity_id_1                     entity_name_1  entity_id_2                    entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0       744161           a tayloe aulander 27805      3043602         a tayloel aulanter 27805    0.961471        Yes           348           348
+1      1972163       jesse coley wadesboro 28170      2071564      je5se coley wadesvoro 28170    0.927195        Yes          2294          2294
+2       136021       gladys doub pfafftown 27040      4014848      gladys doup pfafftown 2704o    0.906275        Yes           368           368
+3       253565     olivia herring mt olive 28365      3065934    olivia herr:ng mt oliv4 28365    0.946607        Yes          1413          1413
+4       892268     nannie worrell mt olive 28365      1053980     nannie worrel1 mt oliv 28365    0.961883        Yes          1391          1391
+5       942139        grace woodard conway 27820      4027086      grace woodarcl conawy 27820    0.942945        Yes          2055          2055
+6        23527     davie averilj bridgeton 28519      1170923    david averill bridgeton 28519    0.933702        Yes           123           123
+7        65154         melv9n bazrd gaston 27832      1335300        melvin baird gaston 27832    0.916933        Yes           259           259
+8       463367         p longmire kittrell 27544      4078469       p longm'lre kittrell 275q4    0.921794        Yes           746           746
+9       640909  elizabeth bullock seaboard 27876      2059445  elizaeth buljock seaboard 27876    0.956522        Yes           237           237
 
-Sample 10 pairs for category of AI validated pairs: false_positives
-   entity_id_1                     entity_name_1  entity_id_2                  entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0       406080      ariel lawton charlotte 28215      3047091    arie1 davis charlotte 2821q    0.550388        Yes       7289515       7232584
-1       353978     susan burnett asheville 28806       405643   susanne hebb asheville 28804    0.557286  ***Yes***       6763291       6136403
-2       408614         debra white sanford 27330      2031437     debra wick4r sanford 27336    0.574803        Yes       2429705       1232746
-3       331498  marian friedman greensboro 27410      3057222  keoly martin greemsboro 27408    0.535181  ***Yes***       3005323       3894697
-4       831285         paul manley raleigh 27609      4002834     steven maloy raleigh 2760q    0.531915        Yes       2460807       4607869
+Sample 10 pairs to inspect AI validated pairs: false_positives
+   entity_id_1                     entity_name_1  entity_id_2                      entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0      1877179        c elks scotland neck 27874      3375116      c hancock scotland neck 27874    0.666667        Yes          1774          1702
+1       949689      c hauser winston salem 27104      1992583       c grubbs winston salem 27104    0.666667        Yes          2107          2343
+2       964856        w bach winston salem 27104      1505004         w bach winston salem 27104    1.000000        Yes           418           940
+3      3875055  ben williard winston salem 27107      4312451  wade williard winston salem 27107    0.666667        Yes          2060          1532
+4       949689      c hauser winston salem 27104      4791870       c hauser winston salem 27104    1.000000        Yes          2107          2099
+5       629100   curtis idol winston salem 27107      2951372    flavel idol winston salem 27107    0.666667        Yes          1836          1639
+6       466645   ada marshall kernersville 27284      2095139    ada marshall kernersville 27284    1.000000        Yes          1689          1685
+7       853421       troy turner pink hill 28572      1498763     mildred turner pink hill 28572    0.666667        Yes          2275           582
+8       628223      e fishel winston salem 27127       794250       e fishel winston salem 27127    1.000000        Yes          1706          1701
+9      1469632   irene griffin williamston 27892      3499979    irene griffin williamston 27892    1.000000        Yes          1430          1425
 
-Sample 10 pairs for category of AI validated pairs: false_negatives
-   entity_id_1                       entity_name_1  entity_id_2                       entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0       311827         mary boyd hot springs 28743      2047370         mari boyd hot springs 20743    0.909612         No       2982215       2982215
-1       319036       phyllis hardin fairmont 28340      1049700        phyllis hardn fairmont 28341    0.944895         No        143758        143758
-2       319656     gustavo ramos mooresville 28115      4026954    gustavo ramos moorestville 28117    0.952807         No       7135553       7135553
-3       837508  donna wanamaker fayetteville 28306      2050729  donna wanamaoer fayetteville 28906    0.927195         No       6934927       6934927
-4       379165      jacob brooks waynesville 28786      2068567       jacob broos waynesville 21786    0.926164         No       4869151       4869151
-5       357711   charles gregory morrisville 27560      1053110   charles kregory morrisville 27540    0.909959         No       7283177       7283177
-6       329329     michael capello charlotte 28262      3064460    michael caepello charlotte 28282    0.920878         No       7535991       7535991
-7       354504        kathryn davis matthews 28104      2043366        kathryn davis madthews 28|04    0.916933         No        923525        923525
-8      2071090       gari mccluney charlotte 28z69      4071222       gary mccluney charloyte 2826g    0.550054         No       3303346       3303346
-9       318529         james overbey clayton 27520      2001573         jajes overbev clayton 27520    0.921317         No       6071205       6071205
+Sample 10 pairs to inspect AI validated pairs: false_negatives
+   entity_id_1                          entity_name_1  entity_id_2                          entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0        55199          boyce fvssell rose bill 28458      1055295           boyce fussell rose ill 284s8    0.900281         No           154           154
+1         1989            gilbert davis clemmon 27017      3001965           gilbert davi5 c|emmons 27012    0.870095         No          1684          1684
+2        47716          louis graham burl8ngton 27297      1876544          louis graham burlington 27217    0.935484         No          1051          1051
+3        27118         raymond vincerit henrico 27442      1567912          raymond vincent henrico 27842    0.911480         No           211           211
+4        59173  florenfe weatherman jonas ridge 28941      1708516  florence weatherman jonas ridge 28641    0.939237         No           225           225
+5       592873    harold griffith winston salem 27105      3028814    harold griffuth winston salem 27115    0.944264         No          1814          1814
+6       133173         jacqueline petty sanford 27330      1062402        jacqueline petry stanford 27330    0.936655         No          1161          1161
+7      1055295           boyce fussell rose ill 284s8      2469862          boyce fussell rose hill 28458    0.931745         No           154           154
+8       932811      johnnie maxwell rocky mount 27801      2043802      johinie maxwell rocky mount 2780|    0.928434         No          2056          2056
+9         8709             grace newmna kinston 25504      1491179             grace newman kinston 28504    0.926164         No           863           863
 
-Sample 10 pairs for category of AI validated pairs: true_negatives
-   entity_id_1                     entity_name_1  entity_id_2                   entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0       354492       james rodgers raleigh 27610       406224    james chambers raleigh 27616    0.574803         No       4331559       1367875
-1       337098     marc williams charlotte 28212       349855   william macon charlotte 28215    0.567091         No       5996596       4275173
-2       333286   christiane murray raleigh 27613       380284  christopher meck raleigh 27615    0.534705         No       1561421       5579418
-3       316702      gregory barrow raleigh 27614       822402      shanae barco raleigh 27610    0.537148         No       3425958       4464009
-4       318914          kim hall charlotte 28208       369048     arthur hale charlotte 28278    0.535509         No       7246810       5111282
-5       366572      david durham charlotte 28217       400024     ariel davis charlotte 28214    0.550388         No       7426942       7232584
-6       367270         norma eller hickory 28602       367498   danielle keller hickory 28601    0.557767         No        193522       8079054
-7       357785  nevonday simmons charlotte 28212       392407  alfred simanas charlotte 28227    0.530612         No       4087413       7089056
-8       344461    james williams charlotte 28217      4049331  james andeahson charlott 28277    0.563857         No       6868187       3441658
-9       310257       emily ortmann raleigh 27617       320827       emily spink raleigh 27617    0.600000         No       5560312       7635966
+Sample 10 pairs to inspect AI validated pairs: true_negatives
+   entity_id_1                         entity_name_1  entity_id_2                          entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0      3701034         j griffin winston salem 27107      3973019         j rothrock winston salem 27107    0.666667         No          1612          1099
+1      1482089        james long winston salem 27127      1754499    james cockerham winston salem 27127    0.666667         No          1489          2126
+2      1540855            j idol winston salem 27101      2157862      clarence idol winston salem 27101    0.666667         No           698          1472
+3       564494            j sapp winston salem 27101      1540855             j idol winston salem 27101    0.666667         No          2207           698
+4       845219  percy johnson north wilkesboro 28659      4201734  louise johnson north wilkesboro 28659    0.666667         No          1143            29
+5       845219  percy johnson north wilkesboro 28659      3143428  louise johnson north wilkesboro 28659    0.666667         No          1143            30
+6       798298       eunice whitfield mt olive 28365      3396922          ruby whitfield mt olive 28365    0.666667         No          1385           197
+7      1589362    pattie transou winston salem 27106      2267773      helen transou winston salem 27106    0.666667         No           593           549
+8      3701693           r foltz winston salem 27104      4769160           r wishon winston salem 27106    0.772950         No           911          1973
+9       542166        mable bradshaw rose hill 28458       931145        george bradshaw rose hill 28458    0.666667         No          1381          1174
+----------------------------------------------------------------------------------------------------
 
-Sample 10 pairs for category of Jaccard pairs: true_positives
-   entity_id_1                         entity_name_1  entity_id_2                         entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0       356027         taylor groce jonesville 28642      2007557         taylor groce jonesvills 286q2    0.935484        Yes       7949811       7949811
-1       341430        theresa meeker asheville 28804      2072254        theresa meeker ashevi1le 2880q    0.939655        Yes       4346220       4346220
-2       324269     kelly shanahan jacksonville 28540      1051930     kelyl shanaban jacksonville 28540    0.952807        Yes       3089880       3089880
-3       311827           mary boyd hot springs 28743      2047370           mari boyd hot springs 20743    0.909612         No       2982215       2982215
-4       387563     stephanie bagby mills river 28759      2047429    stephznie bagtby mills river 28759    0.967213        Yes        832811        832811
-5       394594         brittany mccrary hudson 28638      1046659          brttany mccrary hudson 28632    0.944895        Yes       7201830       7201830
-6       833763            jerry brown asheboro 27205      3061403           jeryr brown astheboro 27205    0.962566        Yes       6581088       6581088
-7       340059  anthony zucconi elizabeth city 27909      1007666  anthony zuccon9 elizabeth city 27g09    0.936555        Yes       5728874       5728874
-8       361083        beatrice davis louisburg 27549      4003466        beatnce daxvis louisburg 27549    0.940327        Yes       3406766       3406766
-9       319036         phyllis hardin fairmont 28340      1049700          phyllis hardn fairmont 28341    0.944895         No        143758        143758
+Sample 10 pairs to inspect Jaccard pairs: true_positives
+   entity_id_1                  entity_name_1  entity_id_2                  entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0       744161        a tayloe aulander 27805      3043602       a tayloel aulanter 27805    0.961471        Yes           348           348
+1      1972163    jesse coley wadesboro 28170      2071564    je5se coley wadesvoro 28170    0.927195        Yes          2294          2294
+2       136021    gladys doub pfafftown 27040      4014848    gladys doup pfafftown 2704o    0.906275        Yes           368           368
+3       253565  olivia herring mt olive 28365      3065934  olivia herr:ng mt oliv4 28365    0.946607        Yes          1413          1413
+4       892268  nannie worrell mt olive 28365      1053980   nannie worrel1 mt oliv 28365    0.961883        Yes          1391          1391
+5        55199  boyce fvssell rose bill 28458      1055295   boyce fussell rose ill 284s8    0.900281         No           154           154
+6       942139     grace woodard conway 27820      4027086    grace woodarcl conawy 27820    0.942945        Yes          2055          2055
+7        23527  davie averilj bridgeton 28519      1170923  david averill bridgeton 28519    0.933702        Yes           123           123
+8        65154      melv9n bazrd gaston 27832      1335300      melvin baird gaston 27832    0.916933        Yes           259           259
+9       463367      p longmire kittrell 27544      4078469     p longm'lre kittrell 275q4    0.921794        Yes           746           746
 
-Sample 10 pairs for category of Jaccard pairs: false_positives
-   entity_id_1                     entity_name_1  entity_id_2                   entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0       354492       james rodgers raleigh 27610       406224    james chambers raleigh 27616    0.574803         No       4331559       1367875
-1       333286   christiane murray raleigh 27613       380284  christopher meck raleigh 27615    0.534705         No       1561421       5579418
-2       316702      gregory barrow raleigh 27614       822402      shanae barco raleigh 27610    0.537148         No       3425958       4464009
-3       318914          kim hall charlotte 28208       369048     arthur hale charlotte 28278    0.535509         No       7246810       5111282
-4       366572      david durham charlotte 28217       400024     ariel davis charlotte 28214    0.550388         No       7426942       7232584
-5       367270         norma eller hickory 28602       367498   danielle keller hickory 28601    0.557767         No        193522       8079054
-6       357785  nevonday simmons charlotte 28212       392407  alfred simanas charlotte 28227    0.530612         No       4087413       7089056
-7       344461    james williams charlotte 28217      4049331  james andeahson charlott 28277    0.563857         No       6868187       3441658
-8       310257       emily ortmann raleigh 27617       320827       emily spink raleigh 27617    0.600000         No       5560312       7635966
-9       393409       james millard clayton 27520      2001573     jajes overbev clayton 27520    0.566580         No       5499456       6071205
+Sample 10 pairs to inspect Jaccard pairs: false_positives
+   entity_id_1                     entity_name_1  entity_id_2                      entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0      1877179        c elks scotland neck 27874      3375116      c hancock scotland neck 27874    0.666667        Yes          1774          1702
+1       949689      c hauser winston salem 27104      1992583       c grubbs winston salem 27104    0.666667        Yes          2107          2343
+2       964856        w bach winston salem 27104      1505004         w bach winston salem 27104    1.000000        Yes           418           940
+3      3875055  ben williard winston salem 27107      4312451  wade williard winston salem 27107    0.666667        Yes          2060          1532
+4       949689      c hauser winston salem 27104      4791870       c hauser winston salem 27104    1.000000        Yes          2107          2099
+5       629100   curtis idol winston salem 27107      2951372    flavel idol winston salem 27107    0.666667        Yes          1836          1639
+6      1223316     j griffin winston salem 27107      3973019     j rothrock winston salem 27107    0.666667         No          1631          1099
+7       466645   ada marshall kernersville 27284      2095139    ada marshall kernersville 27284    1.000000        Yes          1689          1685
+8       853421       troy turner pink hill 28572      1498763     mildred turner pink hill 28572    0.666667        Yes          2275           582
+9       628223      e fishel winston salem 27127       794250       e fishel winston salem 27127    1.000000        Yes          1706          1701
+====================================================================================================
+PROMPT
+====================================================================================================
+[TASK]
 
-Sample 10 pairs for category of Jaccard pairs: false_negatives
-Empty DataFrame
-Columns: [entity_id_1, entity_name_1, entity_id_2, entity_name_2, similarity, validation, cluster_id_1, cluster_id_2]
-Index: []
+You are a careful assistant reviewing pairs of strings that describe real-world entities i.e individuals or organizations. 
+Each string includes concatenated attributes as entity names, addresses, cities, ZIP/postal codes.
+Your job is to decide if the two strings refer to the same real-world entity, even if they are written differently.
 
-Sample 10 pairs for category of Jaccard pairs: true_negatives
-Empty DataFrame
-Columns: [entity_id_1, entity_name_1, entity_id_2, entity_name_2, similarity, validation, cluster_id_1, cluster_id_2]
-Index: []
+[INSTRUCTIONS]
+
+- Consider two strings to refer to the same entity if they describe the same individual or organization;
+- Tolerate difference in the attributes such as punctuation, casing, word order, or abbreviations;
+- Tolerate minor typos, minor misspellings or small differences that resemble common typing;
+- Tolerate attributes that exists only in one string if they do not contradict the other string and they are not essential to the identity of the entity;
+- Do not tolerate major differences in attributes like names and locations.
+
+[RESPONSE]
+
+Answer with either:
+- Yes if they refer to the same real-world entity;
+- No if they refer to different entities.
+No extra text, no additional comments or reasoning.
+
+[EXAMPLES]
+
+String A: “taylor groce jonesville 28642”
+String B: “taylor groce jonesvills 286q2”
+Answer: Yes
+
+String A: “ariel lawton charlotte 28215”
+String B: “tarie1 davis charlotte 2821q”
+Answer: No
+
+String A: “gari mccluney charlotte 28z69”
+String B: “tgary mccluney charloyte 2826g”
+Answer: Yes
+
+String A: “james williams charlotte 28217”
+String B: “james andeahson charlott 28277”
+Answer: No 
+
+[INPUT]
+
+String A: [INSERT STRING A]
+String B: [INSERT STRING B]
+Answer:

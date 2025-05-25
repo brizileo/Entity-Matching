@@ -3,6 +3,7 @@ entity_match_review:
     Determines if two strings refer to the same real-world entity.
   prompt: |
     [TASK]
+
     You are a careful assistant reviewing pairs of strings that describe real-world entities i.e individuals or organizations. 
     Each string includes concatenated attributes as entity names, addresses, cities, ZIP/postal codes.
     Your job is to decide if the two strings refer to the same real-world entity, even if they are written differently.
@@ -16,30 +17,29 @@ entity_match_review:
     - Do not tolerate major differences in attributes like names and locations.
 
     [RESPONSE]
+
     Answer with either:
-
-    ***Yes*** if they refer to the same real-world entity;
-    ***No***  if they refer to different entities.
-
+    - Yes if they refer to the same real-world entity;
+    - No if they refer to different entities.
     No extra text, no additional comments or reasoning.
 
     [EXAMPLES]
 
-    String A: “John Doe New York 6020”
-    String B: “Jane Doe New York 6020”
-    Answer: No
-
-    String A: “John Doe New York 6020”
-    String B: “J0ne Doe NY 60z0”
+    String A: “taylor groce jonesville 28642”
+    String B: “taylor groce jonesvills 286q2”
     Answer: Yes
 
-    String A: “ClearWater Co. 8001 Bay Dr 90210”
-    String B: “ClearWater Company, 8002 Bay Drive, 90210”
+    String A: “ariel lawton charlotte 28215”
+    String B: “tarie1 davis charlotte 2821q”
+    Answer: No
+
+    String A: “gari mccluney charlotte 28z69”
+    String B: “tgary mccluney charloyte 2826g”
     Answer: Yes
 
-    String A: “Bob Max York 6020”
-    String B: “Jane Doe New York 6020”
-    Answer: No
+    String A: “james williams charlotte 28217”
+    String B: “james andeahson charlott 28277”
+    Answer: No 
 
     [INPUT]
 

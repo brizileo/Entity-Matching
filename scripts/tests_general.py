@@ -356,3 +356,23 @@ df = conn.sql('''
 
 
 # %%
+
+
+# Check if there are pairs that were not matched in tbl_entities_pairs_soft_jaccard
+df = conn.sql("""
+    SELECT COUNT(*)
+    FROM tbl_entities_true_pairs
+    """).to_df()
+#%%
+# Check if there are pairs that were not matched in tbl_entities_pairs_soft_jaccard
+df = conn.sql("""
+    SELECT    COUNT(*) AS total_pairs
+              ,COUNT(CASE WHEN sj.entity_id_1 IS NOT NULL THEN sj.entity_id_1 END) matched_pairs
+              ,total_pairs-matched_pairs AS unmatched_pairs
+              ,COUNT(CASE WHEN sj.entity_id_1 IS NOT NULL THEN sj.entity_id_1 END )/COUNT(*) AS ratio
+    FROM tbl_entities_true_pairs AS tp
+    LEFT JOIN tbl_entities_pairs_soft_jaccard AS sj
+    ON tp.entity_id_1 = sj.entity_id_1 AND tp.entity_id_2 = sj.entity_id_2 OR
+        tp.entity_id_1 = sj.entity_id_2 AND tp.entity_id_2 = sj.entity_id_1
+    """).to_df()
+# %%
