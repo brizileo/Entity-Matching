@@ -24,4 +24,4 @@ The partion_criteria is defaulted to `partition1`
 ‼️ Edit the loading module to adjust to your specific format.  
 If you have a different partition, provide it as an additional field in the .csv file and ensure the loading module handles it correctly.
 
-
+Test

@@ -1,6 +1,6 @@
 # Ignore data directories and files
 data_in/**
-!data_in/.gitkeep
+!data_in/*.md
 data_out/** 
 !data_out/.gitkeep
 !data_out/*.log
