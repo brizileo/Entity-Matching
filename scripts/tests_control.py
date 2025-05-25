@@ -1,3 +1,13 @@
+
+# """
+# This checks the results of the soft Jaccard similarity and AI validation steps.
+# It generates a log file with the results of the tests.
+# This script should be run after the main.py script. 
+# It assume that the database has been created and the data has been loaded.
+# It also assumes that the soft Jaccard similarity and AI validation steps have been run.
+# These controls can be executed only in testing phase when the true pairs are known a priori. 
+# """
+
 #%%
 import duckdb
 import configparser
@@ -16,6 +26,8 @@ conn = duckdb.connect(db_path)
 # Get output folder from config
 output_folder = config['OUTPUT_FILES']['data_out']
 log_path = os.path.join(output_folder, 'tests_control.log')
+#%%
+
 
 with open(log_path, 'w', encoding='utf-8') as log:
 

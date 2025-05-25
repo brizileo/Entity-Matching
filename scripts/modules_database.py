@@ -59,7 +59,7 @@ def setup_database():
         );
     """)   
 
-     # Create tbl_entities_pairs_jaccard
+     # Create tbl_entities_pairs_soft_jaccard
     conn.execute("DROP TABLE IF EXISTS tbl_entities_pairs_soft_jaccard;")
     conn.execute("""
         CREATE TABLE tbl_entities_pairs_soft_jaccard (
@@ -71,7 +71,7 @@ def setup_database():
         );
     """)   
 
-     # Create tbl_entities_pairs_validated
+     # Create tbl_entities_pairs_validated by AI models
     conn.execute("DROP TABLE IF EXISTS tbl_entities_pairs_validated;")
     conn.execute("""
         CREATE TABLE tbl_entities_pairs_validated (
@@ -81,6 +81,18 @@ def setup_database():
             ,entity_name_2   VARCHAR
             ,similarity      FLOAT
             ,validation      VARCHAR
+        );
+    """)   
+
+     # Create tbl_entities_true_pairs (only for testing and validation when true pairs are known a priori)
+    conn.execute("DROP TABLE IF EXISTS tbl_entities_true_pairs;")
+    conn.execute("""
+        CREATE TABLE tbl_entities_true_pairs (
+            entity_id_1      INTEGER
+            ,entity_name_1   VARCHAR
+            ,entity_id_2     INTEGER
+            ,entity_name_2   VARCHAR
+            ,cluster_id      VARCHAR
         );
     """)   
 

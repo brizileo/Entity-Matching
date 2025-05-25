@@ -11,7 +11,9 @@ from tqdm import tqdm
 
 def load_entities_from_csv():
     """
-    Load entities from a CSV files
+    Load entities from a CSV files into the tbl_entities table in the DuckDB database.
+    This fucntion need to be adapted to the structure of the CSV files when used in production.
+    The creation of the true pairs table is only possible for testing purposes when the entity clusters are known a priori.
     """
 
     # Get configurations
@@ -58,6 +60,25 @@ def load_entities_from_csv():
 
     """
     )
+
+    # Create table of true pairs (only possible for testing purposes when the entity clusters are known a priori)
+    conn.sql(
+    """
+        INSERT INTO tbl_entities_true_pairs(entity_id_1, entity_name_1, entity_id_2, entity_name_2, cluster_id)
+        SELECT DISTINCT
+            t1.entity_id AS entity_id_1,
+            t1.entity_name AS entity_name_1,
+            t2.entity_id AS entity_id_2,
+            t2.entity_name AS entity_name_2,
+            t1.cluster_id
+        FROM tbl_entities t1
+        INNER JOIN tbl_entities t2
+        ON t1.cluster_id = t2.cluster_id
+        AND t1.entity_id < t2.entity_id
+        WHERE t1.cluster_id IN (SELECT cluster_id FROM tbl_entities)
+    """
+    )
+
 
     conn.commit()
     conn.close()
