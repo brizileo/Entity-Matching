@@ -6,18 +6,19 @@ The target table is `tbl_entities (entity_id, entity_name, partition_criteria, c
 
 The default format assumed for the .csv files is the following:
 
-```python
+<pre>
 entity_id   INT  
 name        VARCHAR  
 surname     VARCHAR  
 address     VARCHAR  
 postcode    VARCHAR
-```  
+</pre>
 
 The loading module concatenate the following attributes: 
-```python
+<pre>
 entity_name = name + surname + address + postcode
-```
+</pre>
+
 The partion_criteria is defaulted to `partition1`
 
 ‼️ Edit the loading module to adjust to your specific format.  
