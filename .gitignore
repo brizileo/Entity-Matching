@@ -1,12 +1,10 @@
-# Ignore everything in 00_Data_In and 10_Data_Out directories
-00_Data_In/
-10_Data_Out/
-
-# Ignore Python bytecode cache
-__pycache__/
-
-# Ignor database
-00_Data/
-
-
+# Ignore data directories and files
+data_in/**
+!data_in/.gitkeep
+data_out/** 
+!data_out/.gitkeep
+!data_out/*.log
+database/
+.venv/
 .DS_Store
+__pycache__/
