@@ -36,7 +36,10 @@ Verify Ollama is running: `curl http://localhost:11434` should return `Ollama is
 If the command does not return the expected output, ensure that the Ollama server is running by executing `ollama serve` in a terminal.  
 Additionally, check that no firewall or network restrictions are blocking access to port 11434.
 
-Place you input .csv file in the `data_in`directory. Read the instruction in the `.gitkeep` for more details. 
+Place your input .csv file in the `data_in`directory. Read the instructions in the `setup.md` file in the same folder for more details. 
+
+This application has been tested on the following dataset (Leipzig University):
+[Benchmark datasets for entity resolution](https://dbs.uni-leipzig.de/files/datasets/saeedi/5Party-ocp20.tar.gz)
 
 ### 📄 References
 
