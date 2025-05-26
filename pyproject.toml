@@ -10,6 +10,8 @@ python = "^3.13"
 duckdb = "^1.2.2"
 ollama = "^0.4.8"
 pandas = "^2.2.3"
+pyyaml = "^6.0.2"
+tqdm = "^4.67.1"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -1,6 +1,11 @@
 #%%
+import csv
+import os
 import duckdb
 import configparser
+import pandas as pd
+import yaml
+from ollama import generate
 
 
 # Get configurations
@@ -276,7 +281,7 @@ SELECT * FROM tbl_entities_pairs_soft_jaccard
 #%%
 df = conn.sql('''
 
-SELECT COUNT(*) FROM tbl_entities_pairs_soft_jaccard
+SELECT * FROM tbl_entities_pairs_validated
     ''').to_df()
 # %%
 #%%
@@ -301,7 +306,73 @@ df = conn.sql('''
   
 #%%
 conn.close()
+
+##############OLLAMA TESTS######################
+# %%
+
+# false negatives
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_pairs_validated    
+    WHERE validation LIKE '%Yes%' AND similarity < 0.6  
+    ''').to_df()
+
+# %%
+
+# true negatives
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_pairs_validated    
+    WHERE validation NOT LIKE '%Yes%' AND similarity < 0.6  
+    ''').to_df()
+
+# %%
+
+# true positives
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_pairs_validated    
+    WHERE validation LIKE '%Yes%' AND similarity > 0.8 
+    ''').to_df()
+
+# %%
+
+# false positives
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_pairs_validated    
+    WHERE validation NOT LIKE '%Yes%' AND similarity > 0.8
+    ''').to_df()
+
+
+
 # %%
 
 
-4830075
+df = conn.sql('''
+    SELECT DISTINCT validation
+    FROM tbl_entities_pairs_validated     
+    ''').to_df()
+
+
+# %%
+
+
+# Check if there are pairs that were not matched in tbl_entities_pairs_soft_jaccard
+df = conn.sql("""
+    SELECT COUNT(*)
+    FROM tbl_entities_true_pairs
+    """).to_df()
+#%%
+# Check if there are pairs that were not matched in tbl_entities_pairs_soft_jaccard
+df = conn.sql("""
+    SELECT    COUNT(*) AS total_pairs
+              ,COUNT(CASE WHEN sj.entity_id_1 IS NOT NULL THEN sj.entity_id_1 END) matched_pairs
+              ,total_pairs-matched_pairs AS unmatched_pairs
+              ,COUNT(CASE WHEN sj.entity_id_1 IS NOT NULL THEN sj.entity_id_1 END )/COUNT(*) AS ratio
+    FROM tbl_entities_true_pairs AS tp
+    LEFT JOIN tbl_entities_pairs_soft_jaccard AS sj
+    ON tp.entity_id_1 = sj.entity_id_1 AND tp.entity_id_2 = sj.entity_id_2 OR
+        tp.entity_id_1 = sj.entity_id_2 AND tp.entity_id_2 = sj.entity_id_1
+    """).to_df()
+# %%
