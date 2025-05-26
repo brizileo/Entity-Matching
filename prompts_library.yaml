@@ -11,10 +11,12 @@ entity_match_review:
     [INSTRUCTIONS]
     
     - Consider two strings to refer to the same entity if they describe the same individual or organization;
-    - Tolerate difference in the attributes such as punctuation, casing, word order, or abbreviations;
+    - Tolerate differences in the attributes such as punctuation, casing, word order, or abbreviations;
     - Tolerate minor typos, minor misspellings or small differences that resemble common typing;
-    - Tolerate attributes that exists only in one string if they do not contradict the other string and they are not essential to the identity of the entity;
-    - Do not tolerate major differences in attributes like names and locations.
+    - Do not tolerate major differences in attributes like names and locations;
+    - Do not tolerate tokens that are completely different, unrelated or that exist in one string but not the other;
+    - Ignore tokens shorter than [MIN_LENGTH] characters, as they are likely to be typos or irrelevant;
+    - In case of doubt, assume the strings refer to different entities.
 
     [RESPONSE]
 

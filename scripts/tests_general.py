@@ -376,3 +376,12 @@ df = conn.sql("""
         tp.entity_id_1 = sj.entity_id_2 AND tp.entity_id_2 = sj.entity_id_1
     """).to_df()
 # %%
+
+df = conn.sql('''
+    SELECT *
+    FROM tbl_entities_tokens
+    WHERE entity_id = 3041676 
+    ''').to_df()
+
+
+# %%
