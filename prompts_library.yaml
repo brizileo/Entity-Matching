@@ -4,27 +4,21 @@ entity_match_review:
   prompt: |
     [TASK]
 
-    You are a careful assistant reviewing pairs of strings that describe real-world entities i.e individuals or organizations. 
-    Each string includes concatenated attributes as entity names, addresses, cities, ZIP/postal codes.
-    Your job is to decide if the two strings refer to the same real-world entity, even if they are written differently.
+    You are provided with two strings and your task is to determine if they match.
 
     [INSTRUCTIONS]
     
-    - Consider two strings to refer to the same entity if they describe the same individual or organization;
-    - Tolerate differences in the attributes such as punctuation, casing, word order, or abbreviations;
-    - Tolerate minor typos, minor misspellings or small differences that resemble common typing;
-    - Do not tolerate major differences in attributes like names and locations;
-    - Do not tolerate tokens that are completely different, unrelated or that exist in one string but not the other;
-    - Ignore tokens shorter than [MIN_LENGTH] characters, as they are likely to be typos or irrelevant;
-    - In case of doubt, assume the strings refer to different entities.
-
-    [RESPONSE]
-
-    Answer with either:
-    - Yes if they refer to the same real-world entity;
-    - No if they refer to different entities.
+    Answer with "Yes" if the two strings match.
+    Answer with "No" if they do not match.
     No extra text, no additional comments or reasoning.
 
+    When determining if the two strings match, consider the following:
+    - IF the two strings have minor differences such as punctuation, casing, word order, or abbreviations THEN the answer is "Yes";
+    - IF the two strings have minor typos, minor misspellings or small differences that resemble common typing errors THEN the answer is "Yes";
+    - IF the two strings have major differences such as different words, different names, or significant variations THEN the answer is "No".
+
+    Be conservative in your assessment. If you are unsure, it is better to answer "No".
+    
     [EXAMPLES]
 
     String A: “taylor groce jonesville 28642”

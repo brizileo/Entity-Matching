@@ -1,134 +1,299 @@
 ====================================================================================================
-Check if the the jaccard similarity threshold = 0.60 and min token lenngth = 2 excludes true pairs:
+Check if the the jaccard similarity threshold = 0.65 and min token lenngth = 2 excludes true pairs:
 ====================================================================================================
-   total_pairs  matched_pairs  unmatched_pairs  ratio
-0          125            118                7  0.944
+   total_pairs  matched_pairs  unmatched_pairs     ratio
+0         1449           1271              178  0.877157
 Following entities were not matched due to threshold applied to soft jaccard pairs:
-   entity_id_1                 entity_name_1  entity_id_2                 entity_name_2 cluster_id
-0        41343          terty aulander 27805      4041372        b derry aulander 27805        904
-1        26836  ethe| kikeah wadesboro 28170      4026964    ethl kiker wadesboro 28|70        665
-2        41343          terty aulander 27805      3041676        b terrv aulander 27805        904
-3      3041676        b terrv aulander 27805      4041372        b derry aulander 27805        904
-4        65154     melv9n bazrd gaston 27832      2065235     melviny baid gaston 27832        259
-5      1053980  nannie worrel1 mt oliv 28365      3002187  nannie orrell mt olive 28363       1391
-6      3054383  troy bell tayl0rsville 2868l      4054261  troy bell taylorsuille 28601       1338
+     entity_id_1                           entity_name_1  entity_id_2                           entity_name_2 cluster_id
+0          33496                doroth lisk hamley 28345      3033682                dorothy lisk hmlet 25345      18389
+1        1033658               dorothy lisk haylet 28385      3033682                dorothy lisk hmlet 25345      18389
+2          73197      lloycl pepper roanoke rapids 2787o      1073242       lloyt pepper roanoke rapids 27860      15871
+3          45746                 marie parker carv 27511      4045706                  mary parket car6 27511      11682
+4          33460        margaret gordon greensbor9 27908      2033518        margardt gordon greensboro 27438       9872
+5          74926               dorothy tem0le kary 27511      2909195               dorothy temple cary 27511      11863
+6        2031697           edard loftin greensboro 274l0      3031862          edward lovtin greensboro 2741o       9873
+7        1020506        madeline fowier high po:nt 27262      2020359        madeline fowlef high poont 27262       5353
+8        1002855               john lee summrfield 27352      4002873              jobn lee summerfield 27308      16116
+9           3936     william hairstom kernersville 27z84      4004021    william hairsston kernersville 27283       4884
+10         70860         louise sear5 kernersville 27244      3070782        louise seaes kernerstville 27284       9667
+11         16211         georgya hodgin greensboro 27q10      4016308         georgia hodgij greensboro 2741o      20205
+12         32381                agnes short ham|et 28145      3032557               agnest short hamlet 28341      23382
+13        720652             bill minor high point 27262      1072589             pill minor high point 2726z       7809
+14         55294   eclwin menzenhall winston salem 27104      2055306    edwjn mendenhall winst0n salem 27104      19272
+15        795013           lillian pike knightdale 27545      2064347          lililan pi1<e knightdale 27545      13256
+16       1071245             joshua rawcoe wintsor 27983      4071210             joshua rasxoe windsor 27953      20696
+17         46659         c1ara cl0ud winston salem 27101      3046901           claa cloud inston salem 27101       2950
+18        757293             mary vick rich square 27869      1049745              mari vick rix square 27869       8449
+19       1026898         william birman greensboro 2741o      4026917        willlam beerman greensboro z7410      10250
+20        573641               sue primm charlotte 28277      2032387               sve prmim charlotte 28277       6040
+21       1018899            paul montgomry rale:gh 27604      2018741             pol montgomery raleie 27604      12706
+22        573641               sue primm charlotte 28277      3045566                sve prim charlotte 28277       6040
+23          3048            wilson joyner fremorit 27835      3002981            wilson joyrier fremond 27830       7503
+24       3060223        emms holland seven springs 28568      4060219        emma holland jeven springs 28s78      21304
+25       1071877          claudia wh'ltt snow kamp 27349      2071761           claudia whitt snoe camp 27339      16589
+26       1010794             maggie bood goldsboro 27s30      2010780              maggie hod goldsbiro 27530       8232
+27       2001817        onetta sc0tt winston salrm 27105      4001872        onetta scott winston slaem 2710s       2740
+28       3058419             sarah duncari raleigg 27607      4022220              sarha dunacn raleigh 27607      12672
+29       1002716         chaahline jenks charlotte 28285      3002679           charline jenks xarlotte 21205      13323
+30         68379            edna osborh high point z7265      2068493            edna osborn high polnt 27261      10971
+31       2059482            pekgy marcottm creston 28615      3059306           peggv marcomtte creston 28615      20717
+32       1063240            helen slian chinquapin 2852l      4063138            helen jloan chinquapin 285z1      12381
+33         65377     frances funderburk greenshoro 27q05      3065318     frsnces funderburk greensboro 27408      19711
+34       1706511             wilson joyner fremont 27830      3002981            wilson joyrier fremond 27830       7503
+35         26356       virginia mansouah goldsboro 2753o      1026486      virginia iiiansour goldshoro 27530      18310
+36       2018741             pol montgomery raleie 27604      3018850          pauls montgomery raleigh 2760q      12706
+37         45229                hlen gaddy polkton 28l35      3045487               helen gaddy polkdon 2813s       5022
+38       2017676           verkale allen creedmoor 2752z      3017779            vermale allen creedmur 29522      10209
+39       3071229                  willie c0le stem 27s81      4071466                  wilkie cole stem 27561       8027
+40         59607               krl hudsobn raleigh 27612      4037215               kar| hudson ralei9h 27612      12611
+41       2007453            j conrad winzton salem 27l04      3007387            j conrad winston saoem 29104      17355
+42       1078612              mane peele goldsboro 2753q      4078550             mariv peele goldsobro 27534       5975
+43         27625         wilbert durrenke charbtte 28205      4004674        wilbert durremce chsrlotte 28205      14794
+44       1015304                 t gany rockingham 28379      2015209                r gamdy rockingham 28979      16401
+45       3075486                 carl mmis raleigh 276o9      4075618                 carl mins raleigh 2760q      11630
+46       2020788               max adans merry ill 27957      4020922              mas adams merry hill 279s7       8589
+47       3011081         jariet daylor rich square 27869      4011107          janed taylor rich square 2786q       2073
+48         51753                dorthy drew raligh 2760q      3051739              dorthy drew raleiygh 276o9      11330
+49         20406         madeline fowler high pint 2726z      2020359        madeline fowlef high poont 27262       5353
+50         79019                annie davis hamket 28545      1079130                annie dauis hamlet 2834s      16115
+51         26836            ethe| kikeah wadesboro 28170      4026964              ethl kiker wadesboro 28|70        665
+52       1027963    elizabeth wright winstom salem 2710s      4027972    elizabeth wrighr winston salem 27|05      19027
+53          1811         onetta scot winston salen 27105      2001817        onetta sc0tt winston salrm 27105       2740
+54        884988            john watson rockingham 28379      3028646           johri watson rockingham 2837g      23411
+55       1062033            ma4y lauedr greensboro 27407      3061856            marv lavder greensboro 27407      17787
+56          1811         onetta scot winston salen 27105      4001872        onetta scott winston slaem 2710s       2740
+57        154935                 joe bland hobgood 27843      1061538                ioe blancl hobgood 27843       7397
+58       1073816          michelie bratton raleigh 27645      3073656          michel1e bratton raleigh 27915      11227
+59         30857        wilbur weeks scotlant neck 27878      2030891        wilbur week5 scotland neck 27824       1033
+60         28374       marlowe preda winston swlem 27106      3028925      marlowe brera winstson salem 27106      20257
+61       1064299            lillan pjke knightdale 27545      2064347          lililan pi1<e knightdale 27545      13256
+62         41343                    terty aulander 27805      3041676                  b terrv aulander 27805        904
+63       1010794             maggie bood goldsboro 27s30      3010811             maggie hood goldsb0ro 2753o       8232
+64         36139           ruth zhaw wins6on salem 27106      4036225            ruht shaw inston salem 27106      18059
+65        690221              max adams merry hill 27957      4020922              mas adams merry hill 279s7       8589
+66       1021607         willette starke golddboro 27533      2021457        willette starke goldsboaro 27550      10196
+67        651493      john gillespie winston salem 27127      2016857      sohn gillespie winston salem 27|27      16493
+68         55199           boyce fvssell rose bill 28458      2469862           boyce fussell rose hill 28458        154
+69       1026898         william birman greensboro 2741o      2001015        william beermam greenwboro 27410      10250
+70       3013387               k wommack lewisvlle 270z3      4013487              i wommack lewisville 27o23       4948
+71        737355             elizabeth brooks cary 27511      1068640            elizabeth bropks carie 27511      11229
+72         17321   richard steuens pleasant garden 27310      2017253  richard steveris pleasant garden 273l3      22221
+73           754  lucinda watl:ngton winston salem 27107      3000744  lusinda watlington winston salem 27131      18828
+74         45746                 marie parker carv 27511      3046006                  mart parker carh 27511      11682
+75        641491                ted gentry roxboro 27574      4043063                tef gentry roxboro 27584      16652
+76         67062        sarah austun winston salem 2710q      2067217        sarao austin winston salem 271o4      19342
+77        292004              ray brogden mt olive 28365      3040535               rai brogden mt oliv 28365       8221
+78       3046497              wrigh5 dixon ralegih 27609      4074488              wri9ht dixon rale8gh 27609      11324
+79       3013975                 zean baim jackson 27845      4014099                 jean bain jacksom 278q5       3500
+80       1011370              roger namce archfale 27263      2011323               rojyr nance archdal 27263      16118
+81       2042680          mary mcdowell high poknt 27z65      4042488          mary mcdwoell high point 27260       8350
+82        593636          eileen lowe mcleansville 27301      3023065         eileen lovve mcleansville 27351      21985
+83       2002663          charline jenks char|otte 48205      3002679           charline jenks xarlotte 21205      13323
+84         58605                landis temple ca4y 27s11      3062968                landis temole carv 27511      12714
+85       2016913         pol caldwell huntersville 28048      3017003        pau| caldwell huntersvjlle 28078      15137
+86       1079583   gladys poindexter winjton salem 27154      4008153  gladys poinclexter winston salem 22104      18033
+87       1051957         btety harrison high point 2726z      4051643         bettv harr:son high point 27262       9164
+88         41595       gertrvd earnhardt charlotte 282l5      2041798      geahtrud earnbardt charlotte 28215      14128
+89       2056419        wendellyn klenn greensboro 274o3      3056254        wendellyn glenn green5boro 25403      18845
+90         13927      walter muahphy winston salem 27l04      1098390       walter murphy winston salem 27104       2729
+91        687171             marion rothstein cary 27511      4009518             marion rothstein kary 275|1      12960
+92        495356              roger nance archdale 27263      2011323               rojyr nance archdal 27263      16118
+93         67062        sarah austun winston salem 2710q      1067168        sarah austin winston 5alem 27174      19342
+94        660634       thurmond ford winston salem 27105      2021370      thurmond forcl winzton salem 27105      16705
+95       3040471                losi merritt dudly 28333      4040188              lois merrqitt dydley 28333       6525
+96         41343                    terty aulander 27805      4041372                  b derry aulander 27805        904
+97        488640           claudia whitt snow camp 27349      1071877          claudia wh'ltt snow kamp 27349      16589
+98         56998       james conracl winston salem 27004      4056872       james corirad winston salem 271o4      17346
+99       1034261          delal lindley greensboro 27q08      2034205          drlla lindley greensboro 274o8       8143
+100      1059349           margaret kn0x charlotte 282o9      3072526           mar9aret knox charlotte 2820q      13661
+101       742180              john bratton raleigh 27615      3068746              sohn bratton raleigh 27115      13246
+102        16981        paug caldwell huntersville 25078      2016913         pol caldwell huntersville 28048      15137
+103      1002716         chaahline jenks charlotte 28285      2002663          charline jenks char|otte 48205      13323
+104      3062968                landis temole carv 27511      4058468                landis temple kary 2751l      12714
+105        61804       bleaker ellis winstoh salem 27175      3061737       bldaker ellis winston salem 26105       2700
+106        45746                 marie parker carv 27511      1995278                  mary parker cary 27511      11682
+107        33496                doroth lisk hamley 28345      1033658               dorothy lisk haylet 28385      18389
+108       789728                 jean bain jackson 27845      3013975                 zean baim jackson 27845       3500
+109      1026486      virginia iiiansour goldshoro 27530      2126311        virginia mansour goldsboro 27530      18310
+110      2015209                r gamdy rockingham 28979      4015406               r gandyf rockingham 2837g      16401
+111      3059529              kaahl hudson raleigh 2761z      4037215               kar| hudson ralei9h 27612      12611
+112      1036296              mae clapp high pount 27962      3036330              ma clapp high poirit 27262       5547
+113      2549832               karl hudson raleigh 27612      3059529              kaahl hudson raleigh 2761z      12611
+114        59607               krl hudsobn raleigh 27612      3059529              kaahl hudson raleigh 2761z      12611
+115      2003399           delja mebane greenjboro 27406      4003474            dell mebane greensboro 27456      20953
+116       377149           paul montgomery raleigh 27604      2018741             pol montgomery raleie 27604      12706
+117      3041676                  b terrv aulander 27805      4041372                  b derry aulander 27805        904
+118        98174             maggie hood goldsboro 27530      1010794             maggie bood goldsboro 27s30       8232
+119        14239           david yelvertin fremont 27860      4014355           david yelgerton fremont 2783o      19128
+120      2071761           claudia whitt snoe camp 27339      4071897           claudya whitt snow camp 2734q      16589
+121      3337727            selma ramey greensboro 27405      4040524        seliiia raiiiey greensboro 27405      19818
+122        61930           mary laudeah gruensboro 27407      1062033            ma4y lauedr greensboro 27407      17787
+123        36139           ruth zhaw wins6on salem 27106      2057972          ruth sthaw winston salem 20106      18059
+124      1025127     claredta hauser winston salem 271o5      3025150    claretta hauser winston xsalem 2710s      20988
+125        65154               melv9n bazrd gaston 27832      2065235               melviny baid gaston 27832        259
+126       607097                dan mcroy new bern 28560      3023247                dam mcroy new pern 28560       2922
+127        58605                landis temple ca4y 27s11      4058468                landis temple kary 2751l      12714
+128      1028595            john watsom rockinfham 28379      3028646           johri watson rockingham 2837g      23411
+129      3002981            wilson joyrier fremond 27830      4003070              ilson joymer fremont 27830       7503
+130       651493      john gillespie winston salem 27127      3016953      sohn gullespie winston salem 27127      16493
+131        20406         madeline fowler high pint 2726z      4020502       madeline fowrler high point 27562       5353
+132      1019439            jamest warner clemmons 2701z      4019491             zames warnjr clemmons 27012      17095
+133      2019676              mary cale rockingham 24379      4002624             mary cag1e rockintham 28379      16214
+134      2011087          lauri waynick greensboro 27q07      4011143          lauri waynick greensboro 274o7       9917
+135        58144         elzie cauley seven spnngs 28578      4058007        elsje cavley seven springs 28578       3318
+136      1078115                caahl fitch grajam 27253      2102555                 carl fitch graham 27253      16650
+137      3061434            johnnie lon9 urlington 27217      4061550           johnnie lohg burlington 272l7      21474
+138      1048705               karl huddon raleigh z7612      3059529              kaahl hudson raleigh 2761z      12611
+139        90048             marie peele goldsboro 27534      1078612              mane peele goldsboro 2753q       5975
+140        48804                 mary baum aydleti 27910      3048938                 marv baum aydlett 27956      18383
+141      1657172        paul caldwell huntersville 28078      2016913         pol caldwell huntersville 28048      15137
+142      1442587                landis temple cary 27511      4058468                landis temple kary 2751l      12714
+143      1023259                dan mcroy new vern 28s60      3023247                dam mcroy new pern 28560       2922
+144       607097                dan mcroy new bern 28560      1023259                dan mcroy new vern 28s60       2922
+145      2078754       carolyri sherrjll charlotte 28210      3078768        car0lyn sherrill charl0tte 28210       4422
+146      1046051            thelma younv charootte 28217      2045901            thelma yo8ng charlotte 282l7      10395
+147        20638             anne mondague raleigh 27692      3062495             annw montague raleigh 2761z      11969
+148      1028509   bertba triplette winston sal em 27103      2044846     brtha triplette winjton salem 27103      19677
+149      1053980            nannie worrel1 mt oliv 28365      3002187            nannie orrell mt olive 28363       1391
+150       518493           ada grant winston salem 27105      3077203           adc grany winston salem 27105      23235
+151        46171        charjes wallace greensboro 274o1      4046128        charles wallwce greensboro 23401      18514
+152        61930           mary laudeah gruensboro 27407      3061856            marv lavder greensboro 27407      17787
+153       282378                    wilma loy elon 27244      3023127                     ilma l0y elon 27244      18368
+154        40511            selma raqey greensboro 27407      4040524        seliiia raiiiey greensboro 27405      19818
+155      1791330           luther morris charlotte 28211      3077617          luther rnorris charl0tte 28211      15339
+156      2052119        robbie snodgnass charlotte 28299      3061929        robbie snodgrass chaelotte 2826g       5930
+157      1032548    imogene stimmons winston salem 27105      4032469      imogee simmons winston salem 271o3       3883
+158        71375                pina nanc xarlotte 28216      3071312              piba namce charlotte 28216      14333
+159      2065386           harper registdr raleigh 276o8      3065230          harper reg'lster raleigh 27604      11745
+160        76281             jack crumptln roxboro 27570      1058224             jack crumpdon roxboro 27s74       3479
+161      1061845      eldritke whitaker burjington 27217      3061660     elclridge whitaker burllngton 27217       3843
+162      1058224             jack crumpdon roxboro 27s74      2076336             jacj crumpton roxboro 2757q       3479
+163        20406         madeline fowler high pint 2726z      1020506        madeline fowier high po:nt 27262       5353
+164      1013391             l< wommack lewisville 270z3      4013487              i wommack lewisville 27o23       4948
+165      2008007         rebaj welch winston salem 271o6      4041225         repah welch winston szlem 27106      19354
+166      1010524              ane mondague raleigh 27612      3062495             annw montague raleigh 2761z      11969
+167      2074617         rosamond weismn charlotte 20209      3065718       rostamond weisman charlotte 282o9      14349
+168       194121               j blizzard deep run 28525      4051805              j 1>lizzard deep rvn 28525       8065
+169      1071877          claudia wh'ltt snow kamp 27349      4071897           claudya whitt snow camp 2734q      16589
+170        34188             melba jonej albertson 285o8      3034409             melba sones albertson 28s08       4332
+171        22795      gilpert ferguson kernersvile 27284      3022932     gikbert fegruson kernersville 27284      22987
+172        17321   richard steuens pleasant garden 27310      3017320   richard stevnes pleasant garden 273l3      22221
+173      2028648          walter aferett c4eedmoor 27522      3028759            alter averett cridmoor 27522       3204
+174        19535             cumella noejl roxbori 27573      1037277              cumella noel rozboro 27573       3716
+175      1020506        madeline fowier high po:nt 27262      4020502       madeline fowrler high point 27562       5353
+176      3054383            troy bell tayl0rsville 2868l      4054261            troy bell taylorsuille 28601       1338
+177      2014753           dorix capps rockinghazm 28379      3014830            dlris capps rockinkham 28379      20632
 ----------------------------------------------------------------------------------------------------
 Confusion matrix of AI validated pairs
 ----------------------------------------------------------------------------------------------------
    true_positives  false_positives  false_negatives  true_negatives
-0            85.0            138.0             33.0           242.0
+0           988.0           2002.0            283.0          2899.0
 ----------------------------------------------------------------------------------------------------
-Confusion matrix of Jaccard pairs with threshold 0.60
+Confusion matrix of Jaccard pairs with threshold 0.65
 ----------------------------------------------------------------------------------------------------
    true_positives  false_positives  false_negatives  true_negatives
-0           118.0            380.0                0               0
+0          1271.0           4901.0                0               0
 ====================================================================================================
 Inspect examples of pairs
 ====================================================================================================
 
 Sample 10 pairs to inspect AI validated pairs: true_positives
-   entity_id_1                       entity_name_1  entity_id_2                        entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0      1022952       petsy frazier warr3nton 27589      2283736        betsy frazier warrenton 27589    0.914894        Yes          1205          1205
-1       618521     nancy timberlake woodland 27897      4051094      nancy timberlaje woodland 278q7    0.935484        Yes           266           266
-2        38740   willie johmson murfreesboro 27853      1552657    willie johnson murfreesboro 27855    0.929260        Yes            84            84
-3      1066948          anni rawls rose hikl 28458      2989219          annie rawls rose hill 28458    0.932990        Yes           199           199
-4       670774  daisy harrington williamston 27892      2011331  daisy harrifngton williamstin 27892    0.973094        Yes           366           366
-5      1646160        charles gentry roxboro 27574      2071366          charles gentry roboro 2757q    0.942646        Yes          1534          1534
-6       211250        essie barwick mt olive 28365      2052416         essie barwick mt ilive 2836s    0.898734        Yes          1387          1387
-7        38740   willie johmson murfreesboro 27853      4038823    willie johnson murfreesbor0 27857    0.913876        Yes            84            84
-8      1635734        gilbert davis clemmons 27012      3001965         gilbert davi5 c|emmons 27012    0.925391        Yes          1684          1684
-9       470652   jane dwiggins winston salem 27103      3011352  jane dwiggisn winston saleiii 27103    0.941478        Yes          1632          1632
+   entity_id_1                          entity_name_1  entity_id_2                          entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0        16211        georgya hodgin greensboro 27q10      1676924        georgia hodgin greensboro 27410    0.921317        Yes         20205         20205
+1         8155  gladys poincexter winsdon salem 27104      2088147  gladys poindexter winston salem 27104    0.961883        Yes         18033         18033
+2       104102    thomas chrismon browns summit 27214      1037707    thomas chrismon brownz summit 27217    0.943005        Yes          9239          9239
+3       556899    claretta hauser winston salem 27105      3025150   claretta hauser winston xsalem 2710s    0.947209        Yes         20988         20988
+4       402233       hilda stanfield burlington 27217      2060951        hlda ztanfield burlington 27217    0.935137        Yes         22156         22156
+5       766638              donald hayes hamlet 28345      4002459             donalcl hayrs hamlet 28345    0.912133        Yes          6089          6089
+6      1003441          della mebane greensb0ro 27416      4003474           dell mebane greensboro 27456    0.906780        Yes         20953         20953
+7        52420           ronmie bowem pink hill 28572      1692830           rommie bowen pink hill 28572    0.934652        Yes           107           107
+8      1028444  katherine ral<er winstkon salem 27103      2264163    katherine raker winston salem 27103    0.935276        Yes         15983         15983
+9       328934          margaret knox charlotte 28209      3072526          mar9aret knox charlotte 2820q    0.933145        Yes         13661         13661
 
 Sample 10 pairs to inspect AI validated pairs: false_positives
-   entity_id_1                      entity_name_1  entity_id_2                      entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0      1908888        alene daye burlington 27217      2215989    alene garrison burlington 27217    0.600000        Yes          2114           744
-1      1481608       dennis peacock halifax 27839      4662609       dennis peacock halifax 27839    1.000000        Yes          2279          2277
-2      1299225    robert hildreth wadesboro 28170      1541427   robert hightower wadesboro 28170    0.600000        Yes          1816          2012
-3       975449               w gay seaboard 27876      3591748            nell gay seaboard 27876    0.750000        Yes           281           243
-4      2643447        jack kiger rural hall 27045      2936268      geneva kiger rural hall 27045    0.666667        Yes          1981          2325
-5      2676351   w whiteheart winston salem 27101      3836848         d wall winston salem 27101    0.600000        Yes          1527           980
-6      1210059  treva kimball winston salem 27107      1990960  treva kimball winston salem 27107    1.000000        Yes           953           955
-7      2899458       frances blalock graham 27253      4448148        frances harden graham 27253    0.600000        Yes          1101          2285
-8      1414936            e stokes colerain 27924      1736477         myra stokes colerain 27924    0.750000        Yes           510          2259
-9      2267773  helen transou winston salem 27106      3524235    helen flynt winston salem 27106    0.666667        Yes           549          2219
+   entity_id_1                        entity_name_1  entity_id_2                          entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0       332943   robert everett robersonville 27871      1674967         t roberson robersonville 27871    0.710392        Yes          1741           397
+1      1412247   ralph marley pleasant garden 27313      4255780  margaret marley pleasant garden 27313    0.666667        Yes          8107          8437
+2      1651181           s bullock greensboro 27410      3178812            mary bulla greensboro 27410    0.696676        Yes         18801         21724
+3      1874850  kathleen wishon winston salem 27107      3180368   katherine banner winston salem 27105    0.742666        Yes         11076         22286
+4      3049383           d smoth kernersville 27284      3184239         alice smith kernersville 27284    0.704545        Yes           809          1512
+5       219638      j wilkinson winston salem 27105      1987817           d vanhoy winston salem 27105    0.753043        Yes          7313         17732
+6       142539     william dawkins high point 27265       601733       william cashatt high point 27265    0.666667        Yes         22065         15821
+7       920416    william moore winston salem 27104      3982601    william wallace winston salem 27104    0.666667        Yes         22659         21690
+8       219638      j wilkinson winston salem 27105      4628806          w hendrix winston salem 27105    0.753043        Yes          7313          4238
+9       374485    james forkner winston salem 27106       795267       james knight winston salem 27106    0.666667        Yes         17905         19264
 
 Sample 10 pairs to inspect AI validated pairs: false_negatives
-   entity_id_1                      entity_name_1  entity_id_2                      entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0        42626    quarlie jackson warrsnton 27989      1907803    quarlie jackson warrenton 27589    0.927195         No          1134          1134
-1         6417      billie pate burlingrton 27267      2054514       billie pate purlington 272l7    0.910551         No          1668          1668
-2      3051295   nancy timberlal<e wood1and 27897      4051094    nancy timberlaje woodland 278q7    0.904899         No           266           266
-3      1416391       troy bell taylorsville 28681      4054261       troy bell taylorsuille 28601    0.938611         No          1338          1338
-4      2038952  wil|ie johnson murfreesboro 2785s      4038823  willie johnson murfreesbor0 27857    0.908802         No            84            84
-5         1989        gilbert davis clemmon 27017      3001965       gilbert davi5 c|emmons 27012    0.870095         No          1684          1684
-6      1721719   lynwood hockaday creedmoor 27522      4068187    lynwood hokaday creedmoor 27542    0.938611         No           897           897
-7        65154          melv9n bazrd gaston 27832      1335300          melvin baird gaston 27832    0.916933         No           259           259
-8      1004143    carlene masxey burlington 272|7      2331035    carlene massey burlington 27217    0.917954         No           432           432
-9         6972          k bla1<ley clemmons 27012      1327835           j blakley clemmons 27012    0.940701         No          1536          1536
+   entity_id_1                           entity_name_1  entity_id_2                           entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0       904268           della mebane greensboro 27406      4003474            dell mebane greensboro 27456    0.935484         No         20953         20953
+1        28405     katherine raker winston 5alem 27173      2264163     katherine raker winston salem 27103    0.913265         No         15983         15983
+2      1557872               orlan james wallace 28466      2016160              orlan jarnes wallade 28466    0.905050         No          4345          4345
+3        57061            irma granzee charkotte 28210      2022800            irma gransee charl9tte 282|0    0.887075         No         14014         14014
+4      1030111          charles weill greenwboro 27488      3030129         chzrles weill greenstboro 27408    0.893093         No          9878          9878
+5      2005305  virginya spainhour winston salem 27|27      3511699  virginia spainhour winston salem 27127    0.939237         No          2831          2831
+6      2254010                  h terry aulander 27805      4041372                  b derry aulander 27805    0.914894         No           904           904
+7      3069849        richard dull winzton salem 271o6      4070012        ricbard dull winstom salem 27106    0.889169         No          4970          4970
+8      1067168        sarah austin winston 5alem 27174      3885971        sarah austin winston salem 27104    0.913265         No         19342         19342
+9       392887           lois burchett charlotte 28226      3073738            lois burxett charlotte 28526    0.905518         No         13519         13519
 
 Sample 10 pairs to inspect AI validated pairs: true_negatives
-   entity_id_1                    entity_name_1  entity_id_2                     entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0      1491179       grace newman kinston 28504      2641512      herndon newman kinston 28504    0.600000         No           863           881
-1      2435118  sarah manning williamston 27892      2797133   julia manning williamston 27892    0.600000         No          1759          1285
-2      1992254        maggie gay seaboard 27876      3591748           nell gay seaboard 27876    0.600000         No           227           243
-3       920476        viola martin conway 27820      3769187         james martin conway 27820    0.600000         No           421          2020
-4       628223     e fishel winston salem 27127      1757362  f mendenhall winston salem 27127    0.600000         No          1706          1765
-5      1540855       j idol winston salem 27101      3836848        d wall winston salem 27101    0.600000         No           698           980
-6      1780236  helen sloan winston salem 27103      3524235   helen flynt winston salem 27106    0.644737         No          2135          2219
-7       772813     inez hackney haw river 27258      3576495  everette hackney haw river 27258    0.666667         No          1222          1218
-8      2280984   r midyette winston salem 27127      4582595        w frye winston salem 27127    0.600000         No           909           958
-9       853421      troy turner pink hill 28572      2441849   thaddeus turner pink hill 28572    0.666667         No          2275           479
+   entity_id_1                             entity_name_1  entity_id_2                            entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0       110190     drusilla roberson robersonville 27871      1674967           t roberson robersonville 27871    0.750000         No          1125           397
+1       647047                   john clay roxboro 27574      1684150                  o clayton roxboro 27573    0.680384         No         23085          6135
+2       794250              e fishel winston salem 27127      2751013           frank fish winston salem 27127    0.776316         No          1701          1248
+3      2034889                t smith kernersvolle 2728q      3184239           alice smith kernersville 27284    0.701783         No           809          1512
+4       676437  katherine williamson winston salem 27104      3982601      william wallace winston salem 27104    0.650165         No         22115         21690
+5      3753911         henry harbuck winston salem 27104      4628806            w hendrix winston salem 27105    0.721939         No          2787          4238
+6      2503491                kathryn wait wallace 28466      4700105                     h wait wallace 28466    0.750000         No          4336          4337
+7       597725      elizabeth simms roanoke rapids 27870       769233  elizabeth matthews roanoke rapids 27870    0.666667         No         16914         17844
+8      1320326         clifton williams high point 27262      1475580           william white high point 27262    0.659751         No         20936          5048
+9      1924712          burgess leonard high point 27262      4945816          marion leonard high point 27262    0.666667         No         22814         18792
 ----------------------------------------------------------------------------------------------------
 
 Sample 10 pairs to inspect Jaccard pairs: true_positives
-   entity_id_1                     entity_name_1  entity_id_2                     entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0         6417     billie pate burlingrton 27267      1006479     bill'le pade burlington 27217    0.845306        Yes          1668          1668
-1       564494        j sapp winston salem 27101      2022338       j stapp winston salem 27100    0.932367        Yes          2207          2207
-2       711201     vernon miles burlington 27215      2056721     fernon miles burlington 2721s    0.908802        Yes          2328          2328
-3      1646160      charles gentry roxboro 27574      2071366       charles gentry roboro 2757q    0.942646        Yes          1534          1534
-4      1392075         g amos kernersville 27284      2044883         9 am0s kernersville 27284    0.914894        Yes          1609          1609
-5      3011081   jariet daylor rich square 27869      4011107    janed taylor rich square 2786q    0.615219         No          2073          2073
-6      1050968   alene garri5on burlimgton 27217      2215989   alene garrison burlington 27217    0.934964        Yes           744           744
-7      1055295      boyce fussell rose ill 284s8      2469862     boyce fussell rose hill 28458    0.931745         No           154           154
-8      3051295  nancy timberlal<e wood1and 27897      4051094   nancy timberlaje woodland 278q7    0.904899         No           266           266
-9        30857  wilbur weeks scotlant neck 27878      2030891  wilbur week5 scotland neck 27824    0.631321         No          1033          1033
+   entity_id_1                          entity_name_1  entity_id_2                          entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0       980233             t smith kernersville 27284      3049383             d smoth kernersville 27284    0.931330         No           809           809
+1      1150153  richard stevens pleasant garden 27313      3017320  richard stevnes pleasant garden 273l3    0.952399        Yes         22221         22221
+2       211250           essie barwick mt olive 28365      2052416           essie barwick mt ilive 2836s    0.898734        Yes          1387          1387
+3       618521        nancy timberlake woodland 27897      3051295       nancy timberlal<e wood1and 27897    0.948196        Yes           266           266
+4       551780            james florence mebane 27302      2027773            jame5 florende mebane 27302    0.937046        Yes         17882         17882
+5      1062033           ma4y lauedr greensboro 27407      2553761           mary lauder greensboro 27407    0.917443        Yes         17787         17787
+6      1018899           paul montgomry rale:gh 27604      3018850         pauls montgomery raleigh 2760q    0.906059        Yes         12706         12706
+7        47947         carrie brown beulavilile 28517      1167901          carrie brown beulaville 28518    0.952085         No          1884          1884
+8       644363                faye drake conway 27820      4065378                faye drake conwa6 278z0    0.923077        Yes          6950          6950
+9        16396            clara johnson roxbkro 27s73      1859238            clara johnson roxboro 27573    0.906059        Yes         21810         21810
 
 Sample 10 pairs to inspect Jaccard pairs: false_positives
-   entity_id_1                         entity_name_1  entity_id_2                      entity_name_2  similarity validation  cluster_id_1  cluster_id_2
-0      3151177          robert brewer clemmons 27012      3585061         elma brewer clemmons 27012    0.600000         No           756          1299
-1       965655        william hornaday liberty 27298      3287230       william euliss liberty 27298    0.600000        Yes          2308          1122
-2      2215989       alene garrison burlington 27217      3842614    alene marshall burlington 27217    0.600000         No           744          1717
-3      3174230          frank cooper haw river 27258      4593687       ila franklin haw river 27258    0.646091        Yes          1323          1649
-4      3329724           w lakey winston salem 27127      3774126      l leonard winston salem 27127    0.600000        Yes           976          1353
-5      3555283  pearl washington winston salem 27105      4769160       r wishon winston salem 27106    0.728527         No          2125          1973
-6      4769160          r wishon winston salem 27106      4791870       c hauser winston salem 27104    0.724020         No          1973          2099
-7      4769160          r wishon winston salem 27106      4795952  h e robertson winston salem 27107    0.724020         No          1973          1664
-8      2022338           j stapp winston salem 27100      4769160       r wishon winston salem 27106    0.724020         No          2207          1973
-9      2022338           j stapp winston salem 27100      2747137    arnold sapp winston salem 27107    0.750973         No          2207          1738
+   entity_id_1                        entity_name_1  entity_id_2                       entity_name_2  similarity validation  cluster_id_1  cluster_id_2
+0      1684150              o clayton roxboro 27573      4421473          mary clayton roxboro 27573    0.750000         No          6135         10223
+1        54558          e smith winston shlem 27102      3647198   douglas smith winston salem 27101    0.730769         No         19657          2820
+2       470652    jane dwiggins winston salem 27103       835780     jane fowler winston salem 27103    0.666667         No          1632         17908
+3       104346    william rabil winston salem 27104      4754353  william mowery winston salem 27104    0.666667        Yes         18041          3669
+4       104346    william rabil winston salem 27104       808764  william keiger winston salem 27104    0.666667        Yes         18041         10846
+5       104346    william rabil winston salem 27104       389720   rosalie rabil winston salem 27104    0.666667        Yes         18041         19280
+6      2689624      w livengood winston salem 27103      4093051  carl livengood winston salem 27106    0.771654         No          2803         19016
+7       556899  claretta hauser winston salem 27105       949689        c hauser winston salem 27104    0.771654        Yes         20988          2107
+8      1209850         nola garner high point 27263      1623890    fletcher garner high point 27263    0.666667         No         22727         18967
+9       687107        helen allred high point 27265      3127330        helen jones high point 27265    0.666667         No          8010         19800
 ====================================================================================================
 PROMPT
 ====================================================================================================
 [TASK]
 
-You are a careful assistant reviewing pairs of strings that describe real-world entities i.e individuals or organizations. 
-Each string includes concatenated attributes as entity names, addresses, cities, ZIP/postal codes.
-Your job is to decide if the two strings refer to the same real-world entity, even if they are written differently.
+You are provided with two strings and your task is to determine if they match.
 
 [INSTRUCTIONS]
 
-- Consider two strings to refer to the same entity if they describe the same individual or organization;
-- Tolerate differences in the attributes such as punctuation, casing, word order, or abbreviations;
-- Tolerate minor typos, minor misspellings or small differences that resemble common typing;
-- Do not tolerate major differences in attributes like names and locations;
-- Do not tolerate tokens that are completely different, unrelated or that exist in one string but not the other;
-- Ignore tokens shorter than [MIN_LENGTH] characters, as they are likely to be typos or irrelevant;
-- In case of doubt, assume the strings refer to different entities.
-
-[RESPONSE]
-
-Answer with either:
-- Yes if they refer to the same real-world entity;
-- No if they refer to different entities.
+Answer with "Yes" if the two strings match.
+Answer with "No" if they do not match.
 No extra text, no additional comments or reasoning.
+
+When determining if the two strings match, consider the following:
+- IF the two strings have minor differences such as punctuation, casing, word order, or abbreviations THEN the answer is "Yes";
+- IF the two strings have minor typos, minor misspellings or small differences that resemble common typing errors THEN the answer is "Yes";
+- IF the two strings have major differences such as different words, different names, or significant variations THEN the answer is "No".
+
+Be conservative in your assessment. If you are unsure, it is better to answer "No".
 
 [EXAMPLES]
 
