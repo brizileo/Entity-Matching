@@ -21,6 +21,7 @@ def report():
 
     db_path = config['DATABASE']['db_path']
     jaccard_threshold = config['PARAMETERS']['jaccard_threshold']
+    min_token_length = config['PARAMETERS']['tokens_min_length']
 
     # Create a connection to the DuckDB database
     conn = duckdb.connect(db_path)
@@ -44,7 +45,7 @@ def report():
             tp.entity_id_1 = sj.entity_id_2 AND tp.entity_id_2 = sj.entity_id_1
         """).to_df()
         log.write('==' * 50 + '\n')   
-        log.write('Check if the the jaccard similarity threshold = '+jaccard_threshold+' excludes true pairs:\n')    
+        log.write('Check if the the jaccard similarity threshold = '+jaccard_threshold+' and min token lenngth = '+min_token_length+' excludes true pairs:\n')    
         log.write('==' * 50 + '\n')            
         log.write(df.to_string() + '\n')
 

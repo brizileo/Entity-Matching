@@ -96,6 +96,7 @@ def tokenize():
     config_files = config.read('../config.ini')
 
     db_path = config['DATABASE']['db_path']
+    min_token_length = config['PARAMETERS']['tokens_min_length']
 
     # Create a connection to the DuckDB database
     conn = duckdb.connect(db_path)
@@ -125,7 +126,8 @@ def tokenize():
                 ,regexp_split_to_table(entity_name, ' ') AS word
             FROM tbl_entities, 
             ) X 
-        ) Y;
+        ) Y
+    WHERE LENGTH(token) > """ + min_token_length + """;
     """
     )
     conn.commit()
@@ -296,6 +298,7 @@ def soft_jaccard_similarity():
     conn.close()
 
 
+
 def pairs_validation(similarity_model='soft_jaccard'):
     """
     Validate the pairs of entities using the Ollama API
@@ -307,6 +310,7 @@ def pairs_validation(similarity_model='soft_jaccard'):
     config_files = config.read('../config.ini')
 
     db_path = config['DATABASE']['db_path']
+    min_token_length = config['PARAMETERS']['tokens_min_length']
 
     # Create a connection to the DuckDB database
     conn = duckdb.connect(db_path)   
@@ -341,6 +345,7 @@ def pairs_validation(similarity_model='soft_jaccard'):
         prompt = prompt_library['entity_match_review']['prompt']
         prompt = prompt.replace('[INSERT STRING A]', entity_name_1)
         prompt = prompt.replace('[INSERT STRING B]', entity_name_2)
+        prompt = prompt.replace('[MIN_LENGTH]', min_token_length)
         
         # Call the Ollama API
         response = generate('phi4-mini', prompt)
